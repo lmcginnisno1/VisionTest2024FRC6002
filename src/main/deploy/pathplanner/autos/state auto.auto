@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.5,
+      "y": 7.0
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "preload state"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "second note state"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "third note state"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "fourth note state"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

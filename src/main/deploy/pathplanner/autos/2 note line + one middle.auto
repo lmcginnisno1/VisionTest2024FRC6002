@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.4,
+      "y": 6.9
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "preload 3 note line"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "first note line"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "second note line"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "note 2 to middle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle note to wing"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
