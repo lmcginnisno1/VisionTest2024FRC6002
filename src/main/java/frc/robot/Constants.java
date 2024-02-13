@@ -253,15 +253,13 @@ public final class Constants {
   }
 
   public static final class CameraConstants{
-    public static final boolean kDriveCam = true;
-    public static final boolean kLimelight = false;
     public static final int kDriveCamIndex = 2;
     public static final int kLimelightIndex = 1;
 
-    public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+    public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.5;
     public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
-    public static final double POSE_AMBIGUITY_MULTIPLIER = 4;
-    public static final double NOISY_DISTANCE_METERS = 6;
+    public static final double POSE_AMBIGUITY_MULTIPLIER = 1;
+    public static final double NOISY_DISTANCE_METERS = 10;
     public static final double DISTANCE_WEIGHT = 7;
     public static final int TAG_PRESENCE_WEIGHT = 10;
 
@@ -269,15 +267,15 @@ public final class Constants {
                                                                                             0.0/*camera distace laterally from center*/,
                                                                                             0.343/*camera distance vertically from ground*/),
                                                                           new Rotation3d(0.0/*leave at 0*/,
-                                                                                        0.35,/*adjust if camera is mounted at an angle*/
-                                                                                          0.0/*leave at 0*/));
+                                                               Units.degreesToRadians(20),/*adjust if camera is mounted at an angle*/
+                                                                                          0.0/*shooter is 0, ground intake is 180*/));
 
     public static final Transform3d PICKUP_CAMERAN_TO_ROBOT = new Transform3d(new Translation3d(0.29845/*camera distance forwards from center*/,
                                                                                             0.0/*camera distace laterally from center*/,
                                                                                             0.343/*camera distance vertically from ground*/),
                                                                           new Rotation3d(0.0/*leave at 0*/,
-                                                                                        0.35,/*adjust if camera is mounted at an angle*/
-                                                                                          0.0/*leave at 0*/));
+                                                               Units.degreesToRadians(20),/*adjust if camera is mounted at an angle*/
+                                                               Units.degreesToRadians(180)/*shooter is 0, ground intake is 180*/));
   }
 
   public static final class FieldConstants{

@@ -22,8 +22,10 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CameraConstants;
 import frc.robot.Constants.DriveConstants;
@@ -36,16 +38,15 @@ public class SUB_PoseEstimator extends SubsystemBase {
   // "trust" the estimate from that particular component more than the others.
   // This in turn means the particualr component will have a stronger influence
   // on the final pose estimate.
-
-
   private final Supplier<Rotation2d> rotationSupplier;
   private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
   private final SwerveDrivePoseEstimator poseEstimator;
   private final Field2d field2d = new Field2d();
-  private final PhotonRunnable rightEstimator = new PhotonRunnable(new PhotonCamera("rightCamera"),
+  private final PhotonRunnable ShooterEstimator = new PhotonRunnable(new PhotonCamera("shooter_camera"),
       CameraConstants.SHOOTER_CAMERA_TO_ROBOT);
-  private final PhotonRunnable leftEstimator = new PhotonRunnable(new PhotonCamera("leftCamera"),
+  private final PhotonRunnable Pickup = new PhotonRunnable(new PhotonCamera("pickup_camera"),
       CameraConstants.PICKUP_CAMERAN_TO_ROBOT);
+  private SUB_Drivetrain m_drivetrain;
   // private final PhotonRunnable backEstimator = new PhotonRunnable(new
   // PhotonCamera("backCamera"),
   // VisionROBOT_TO_BACK_CAMERA);
@@ -62,11 +63,11 @@ public class SUB_PoseEstimator extends SubsystemBase {
    */
   private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));
 
-  // private final Notifier rightNotifier = new Notifier(rightEstimator);
-  // private final Notifier leftNotifier = new Notifier(leftEstimator);
+  // private final Notifier rightNotifier = new Notifier(ShooterEstimator);
+  // private final Notifier leftNotifier = new Notifier(Pickup);
   private final Notifier allNotifier = new Notifier(() -> {
-    rightEstimator.run();
-    leftEstimator.run();
+    ShooterEstimator.run();
+    Pickup.run();
   });
   // private final Notifier backNotifier = new Notifier(backEstimator);
 
@@ -75,8 +76,10 @@ public class SUB_PoseEstimator extends SubsystemBase {
   // private final ArrayList<Double> xValues = new ArrayList<Double>();
   // private final ArrayList<Double> yValues = new ArrayList<Double>();
 
-  public SUB_PoseEstimator(Supplier<Rotation2d> rotationSupplier,
+  public SUB_PoseEstimator(SUB_Drivetrain p_Drivetrain, Supplier<Rotation2d> rotationSupplier,
          Supplier<SwerveModulePosition[]> modulePositionSupplier) {
+    m_drivetrain = p_Drivetrain;
+    
     this.rotationSupplier = rotationSupplier;
     this.modulePositionSupplier = modulePositionSupplier;
 
@@ -102,6 +105,8 @@ public class SUB_PoseEstimator extends SubsystemBase {
 
     // backNotifier.setName("backRunnable");
     // backNotifier.startPeriodic(0.02);
+    ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
+    addDashboardWidgets(tab);
   }
 
   public void addDashboardWidgets(ShuffleboardTab tab) {
@@ -143,12 +148,12 @@ public class SUB_PoseEstimator extends SubsystemBase {
   public void periodic() {
     // Update pose estimator with drivetrain sensors
     poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
-    if (true) {
-      estimatorChecker(rightEstimator);
-      estimatorChecker(leftEstimator);
-    } else {
-      allNotifier.close();
-    }
+    // if (true) {
+      estimatorChecker(ShooterEstimator);
+      estimatorChecker(Pickup);
+    // } else {
+    //   allNotifier.close();
+    // }
 
     // estimatorChecker(backEstimator);
 
@@ -159,6 +164,11 @@ public class SUB_PoseEstimator extends SubsystemBase {
       dashboardPose = flipAlliance(dashboardPose);
     }
     field2d.setRobotPose(dashboardPose);
+
+    SmartDashboard.putNumber("vision estimated x", getCurrentPose().getX());
+    SmartDashboard.putNumber("vision estimated Y", getCurrentPose().getY());
+    SmartDashboard.putNumber("vision estimated heading", getCurrentPose().getRotation().getDegrees());
+    m_drivetrain.resetPose(getCurrentPose());
   }
 
   private String getFomattedPose() {
@@ -196,9 +206,7 @@ public class SUB_PoseEstimator extends SubsystemBase {
   /**
    * Transforms a pose to the opposite alliance's coordinate system. (0,0) is
    * always on the right corner of your
-   * alliance wall, so for 2023, the field elements are at different coordinates
-   * for each alliance.
-   * 
+   * alliance wall
    * @param poseToFlip pose to transform to the other alliance
    * @return pose relative to the other alliance's coordinate system
    */
@@ -236,16 +244,15 @@ public class SUB_PoseEstimator extends SubsystemBase {
     return visionMeasurementStdDevs.times(confidenceMultiplier);
   }
 
-  public void estimatorChecker(PhotonRunnable estamator) {
-    var cameraPose = estamator.grabLatestEstimatedPose();
+  public void estimatorChecker(PhotonRunnable estimator) {
+    var cameraPose = estimator.grabLatestEstimatedPose();
     if (cameraPose != null) {
       // New pose from vision
       var pose2d = cameraPose.estimatedPose.toPose2d();
       if (originPosition == kRedAllianceWallRightSide) {
         pose2d = flipAlliance(pose2d);
       }
-      poseEstimator.addVisionMeasurement(pose2d, cameraPose.timestampSeconds,
-          confidenceCalculator(cameraPose));
+      poseEstimator.addVisionMeasurement(pose2d, cameraPose.timestampSeconds, confidenceCalculator(cameraPose));
     }
   }
 }

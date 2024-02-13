@@ -29,7 +29,7 @@ public class RobotContainer {
   // final SUB_Climber m_Climber = new SUB_Climber();
   // final SUB_Limelight m_Limelight = new SUB_Limelight();
   private final SUB_Drivetrain m_RobotDrive = new SUB_Drivetrain(m_Variables);
-  final SUB_PoseEstimator m_PoseEstimator = new SUB_PoseEstimator(m_RobotDrive::getHeadingRotation2d, m_RobotDrive::getModulePositions);
+  final SUB_PoseEstimator m_PoseEstimator = new SUB_PoseEstimator(m_RobotDrive, m_RobotDrive::getHeadingRotation2d, m_RobotDrive::getModulePositions);
   // final SUB_TopShooter m_TopShooter = new SUB_TopShooter();
   // final SUB_BottomShooter m_BottomShooter = new SUB_BottomShooter();
   // final SUB_Shooter m_Shooter = new SUB_Shooter(m_TopShooter, m_BottomShooter);
