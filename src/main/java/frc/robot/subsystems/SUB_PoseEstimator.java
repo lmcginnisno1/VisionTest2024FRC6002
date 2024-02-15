@@ -21,6 +21,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -169,6 +170,10 @@ public class SUB_PoseEstimator extends SubsystemBase {
     SmartDashboard.putNumber("vision estimated Y", getCurrentPose().getY());
     SmartDashboard.putNumber("vision estimated heading", getCurrentPose().getRotation().getDegrees());
     m_drivetrain.resetPose(getCurrentPose());
+
+    if(DriverStation.getAlliance().isPresent()){
+      setAlliance(DriverStation.getAlliance().get());
+    }
   }
 
   private String getFomattedPose() {
