@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -76,8 +75,8 @@ public class CMD_Drive extends Command{
 
     /* Override driver rotation if AutoAlign is enabled. */
     if (this.controller.leftTrigger().getAsBoolean()) {
-        double heading_error = Units.radiansToDegrees(
-            m_Variables.getRobotPose().getRotation().getRadians() - m_Variables.getAngleToTarget());
+        double heading_error =
+            m_Variables.getRobotPose().getRotation().getDegrees() - m_Variables.getAngleToTarget();
 
         if (Math.abs(heading_error) > 5) {
           rot = heading_error * 0.002;

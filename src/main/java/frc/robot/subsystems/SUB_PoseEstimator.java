@@ -45,12 +45,9 @@ public class SUB_PoseEstimator extends SubsystemBase {
   private final Field2d field2d = new Field2d();
   private final PhotonRunnable ShooterEstimator = new PhotonRunnable(new PhotonCamera("shooter_camera"),
       CameraConstants.SHOOTER_CAMERA_TO_ROBOT);
-  private final PhotonRunnable Pickup = new PhotonRunnable(new PhotonCamera("pickup_camera"),
-      CameraConstants.PICKUP_CAMERAN_TO_ROBOT);
+  // private final PhotonRunnable Pickup = new PhotonRunnable(new PhotonCamera("pickup_camera"),
+  //     CameraConstants.PICKUP_CAMERAN_TO_ROBOT);
   private SUB_Drivetrain m_drivetrain;
-  // private final PhotonRunnable backEstimator = new PhotonRunnable(new
-  // PhotonCamera("backCamera"),
-  // VisionROBOT_TO_BACK_CAMERA);
 
     /**
    * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
@@ -68,7 +65,7 @@ public class SUB_PoseEstimator extends SubsystemBase {
   // private final Notifier leftNotifier = new Notifier(Pickup);
   private final Notifier allNotifier = new Notifier(() -> {
     ShooterEstimator.run();
-    Pickup.run();
+    // Pickup.run();
   });
   // private final Notifier backNotifier = new Notifier(backEstimator);
 
@@ -103,9 +100,7 @@ public class SUB_PoseEstimator extends SubsystemBase {
 
     allNotifier.setName("runAll");
     allNotifier.startPeriodic(0.02);
-
-    // backNotifier.setName("backRunnable");
-    // backNotifier.startPeriodic(0.02);
+    
     ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
     addDashboardWidgets(tab);
   }
@@ -151,7 +146,7 @@ public class SUB_PoseEstimator extends SubsystemBase {
     poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
     // if (true) {
       estimatorChecker(ShooterEstimator);
-      estimatorChecker(Pickup);
+      // estimatorChecker(Pickup);
     // } else {
     //   allNotifier.close();
     // }

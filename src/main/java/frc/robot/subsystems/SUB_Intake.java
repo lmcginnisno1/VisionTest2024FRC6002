@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
@@ -11,6 +12,7 @@ import frc.robot.Constants.IntakeConstants;
 public class SUB_Intake extends SubsystemBase{
     CANSparkMax m_groundIntakeMotor;
     CANSparkMax m_indexerMotor;
+    DigitalInput m_indexerSensor = new DigitalInput(IntakeConstants.kIndexerSensorDigitalPort);
     double HighestCurrent = Double.MIN_VALUE;
 
     public SUB_Intake(){
@@ -39,6 +41,10 @@ public class SUB_Intake extends SubsystemBase{
 
     public void stopIndexer(){
         m_groundIntakeMotor.set(IntakeConstants.kIntakeOff);
+    }
+
+    public boolean getIntakeSensor(){
+        return m_indexerSensor.get();
     }
 
     @Override

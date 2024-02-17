@@ -168,6 +168,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int kGroundIntakeMotorCANId = 11;
     public static final int kIndexerMotorCANId = 13;
+    public static final int kIndexerSensorDigitalPort = 1;
 
     public static final double kIntakeForward = 0.25;
     public static final double kIntakeOff = 0.0;
@@ -210,9 +211,6 @@ public final class Constants {
     public static final double kShooterMaxOutput = 1.0;
 
     public static final double kBottomShooterVelocityFF = 10.0;
-
-    public static final double kFeederFeed = 0.75;
-    public static final double kFeederOff = 0.0;
   }
 
   public static final class ArmConstants{
