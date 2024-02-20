@@ -15,6 +15,7 @@ public class CMD_ChaseDownNote extends Command{
     SUB_Intake m_intake;
     Timer m_timer = new Timer();
     boolean m_isFinished;
+    double target_yaw, target_area, heading_error, rot, xSpeed;
 
     public CMD_ChaseDownNote(SUB_Drivetrain p_drivetrain, SUB_Intake p_intake){
         m_drivetrain = p_drivetrain;
@@ -28,17 +29,31 @@ public class CMD_ChaseDownNote extends Command{
         m_intake.setIndexerPower(Constants.IntakeConstants.kIndexerForward);
         m_timer.reset();
         m_timer.start();
+
+        target_yaw = 0;
+        target_area = 0;
+        heading_error = 0;
+        rot = 0;
+        xSpeed = 0;
     }
 
     @Override
     public void execute(){
-        double target_yaw = m_backCamera.getLatestResult().getBestTarget().getYaw();
-        double target_area = m_backCamera.getLatestResult().getBestTarget().getArea();
-        double heading_error = m_drivetrain.getPose().getRotation().getDegrees() - (180 + target_yaw);
+        if(m_backCamera.getLatestResult().hasTargets()){
+            target_yaw = m_backCamera.getLatestResult().getBestTarget().getYaw();
+            target_area = m_backCamera.getLatestResult().getBestTarget().getArea();
+            heading_error = m_drivetrain.getPose().getRotation().getDegrees() - (180 + target_yaw);
 
-        double rot = heading_error * 0.002;
-        double xSpeed = target_area / (Math.pow(target_area, 3));
-        MathUtil.clamp(xSpeed, 0.1, 0.75);
+            rot = heading_error * 0.002;
+            xSpeed = target_area / (Math.pow(target_area, 3));
+            MathUtil.clamp(xSpeed, 0.05, 0.75);
+        }else{
+            target_yaw = 0;
+            target_area = 0;
+            heading_error = 0;
+            rot = 0;
+            xSpeed = 0;
+        }
 
         m_drivetrain.drive(xSpeed, 0, rot, false, true);
 

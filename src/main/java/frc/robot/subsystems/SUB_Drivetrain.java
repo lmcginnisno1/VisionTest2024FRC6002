@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -27,8 +26,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.GlobalVariables;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+
 
 public class SUB_Drivetrain extends SubsystemBase {
   // Create MAXSwerveModules
@@ -65,22 +67,18 @@ public class SUB_Drivetrain extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
   ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0, 0, 0);
   GlobalVariables m_variables;
+  SUB_Vision m_vision;
   double m_distanceToTarget = 0;
   double m_AngleToTarget = 0;
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-    DriveConstants.kDriveKinematics,
-    Rotation2d.fromDegrees(m_navx.getAngle()),
-    new SwerveModulePosition[] {
-      m_frontLeft.getPosition(),
-      m_frontRight.getPosition(),
-      m_rearLeft.getPosition(),
-      m_rearRight.getPosition()
-  });
+  SwerveDrivePoseEstimator m_odometry = 
+    new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, getHeadingRotation2d(), getModulePositions(), getPose(),
+    VisionConstants.stateStdDevs, VisionConstants.visionStdDevs);
 
   /** Creates a new DriveSubsystem. */
-  public SUB_Drivetrain(GlobalVariables p_variables) {
+  public SUB_Drivetrain(GlobalVariables p_variables, SUB_Vision p_vision) {
     m_variables = p_variables;
+    m_vision = p_vision;
 
     AutoBuilder.configureHolonomic(
       this::getPose, // Robot pose supplier
@@ -98,16 +96,28 @@ public class SUB_Drivetrain extends SubsystemBase {
     // Update the odometry in the periodic block
     m_odometry.update(
       Rotation2d.fromDegrees(m_navx.getAngle()),
-      new SwerveModulePosition[] {
-        m_frontLeft.getPosition(),
-        m_frontRight.getPosition(),
-        m_rearLeft.getPosition(),
-        m_rearRight.getPosition()
-      });
+      getModulePositions());
+
+      var visionEst = m_vision.getEstimatedGlobalPose();
+        visionEst.ifPresent(
+                est -> {
+                    var estPose = est.estimatedPose.toPose2d();
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = m_vision.getEstimationStdDevs(estPose);
+
+                    m_odometry.addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                });
 
       SmartDashboard.putNumber("robot X", getPose().getX());
       SmartDashboard.putNumber("robot Y", getPose().getY());
       SmartDashboard.putNumber("robot Heading", getPose().getRotation().getDegrees());
+
+     if(visionEst.isPresent()){
+      SmartDashboard.putNumber("visionX", visionEst.get().estimatedPose.getX());
+      SmartDashboard.putNumber("visionY", visionEst.get().estimatedPose.getY());
+      SmartDashboard.putNumber("visionHeading", Units.radiansToDegrees(visionEst.get().estimatedPose.getRotation().getAngle()));
+     }
 
       if(DriverStation.getAlliance().isPresent()){
         if(DriverStation.getAlliance().get() == Alliance.Blue){
@@ -180,7 +190,7 @@ public class SUB_Drivetrain extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_odometry.getEstimatedPosition();
   }
 
   /**
@@ -191,12 +201,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   public void resetPose(Pose2d pose) {
     m_odometry.resetPosition(
         Rotation2d.fromDegrees(m_navx.getAngle()),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        },
+        getModulePositions(),
         pose);
   }
 
@@ -300,7 +305,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   }
 
   public ChassisSpeeds getChassisSpeeds(){
-    return DriveConstants.kDriveKinematics.toChassisSpeeds();
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
   /**
    * Sets the wheels into an X formation to prevent movement.
@@ -330,6 +335,12 @@ public class SUB_Drivetrain extends SubsystemBase {
     SwerveModulePosition[] modulePositions = {m_frontLeft.getPosition(), m_frontRight.getPosition(),
                                            m_rearLeft.getPosition(), m_rearRight.getPosition()};
     return modulePositions;
+  }
+
+  public SwerveModuleState[] getModuleStates(){
+    SwerveModuleState[] moduleStates = {m_frontLeft.getState(), m_frontRight.getState(),
+                                           m_rearLeft.getState(), m_rearRight.getState()};
+    return moduleStates;
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
@@ -366,5 +377,4 @@ public class SUB_Drivetrain extends SubsystemBase {
   public double getTurnRate() {
     return m_navx.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
-
 }

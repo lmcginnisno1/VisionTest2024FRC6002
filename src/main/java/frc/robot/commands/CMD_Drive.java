@@ -37,17 +37,6 @@ public class CMD_Drive extends Command{
  
   @Override
   public void execute() {
-    // y = controller.getLeftY();
-
-    // x = controller.getLeftX();
-
-    // turn = controller.getRightX();
-    // Get the x speed. We are inverting this because Xbox controllers return
-    // negative values when we push forward.
-
-    // final var xSpeed = xspeedLimiter.calculate(modifyAxis(-controller.getLeftY()))
-    //     * DriveConstants.kMaxSpeedMetersPerSecond;
-
     // final var xSpeed = xspeedLimiter.calculate(MathUtil.applyDeadband(-controller.getLeftY(), deadzone));
     // final var xSpeed = MathUtil.applyDeadband(-controller.getLeftY(), deadzone);  
     var xSpeed = MathUtil.applyDeadband(-controller.getLeftY(), deadzone);
@@ -92,7 +81,6 @@ public class CMD_Drive extends Command{
 
 
     m_drivetrain.drive(xSpeed, ySpeed, rot, true, true);
-    // m_drivetrain.drive( .4, 0, 0.0, true);
   }
 
 

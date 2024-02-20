@@ -8,11 +8,16 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import com.pathplanner.lib.util.PIDConstants;
@@ -250,9 +255,13 @@ public final class Constants {
     public static final double kClimberServoUnhooked = 0.5;
   }
 
-  public static final class CameraConstants{
-    public static final int kDriveCamIndex = 2;
-    public static final int kLimelightIndex = 1;
+  public static final class VisionConstants{
+    public static final String kCameraName = "shooter_camera";
+
+    public static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
+    public static final Vector<N3> VisionSingleTagStdDevs = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));
+    public static final Vector<N3> VisionMultiTagStdDevs = VecBuilder.fill(0.25, 0.25, Units.degreesToRadians(5));
+    public static final Vector<N3> visionStdDevs = VecBuilder.fill(1, 1, 1);
 
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.5;
     public static final double POSE_AMBIGUITY_SHIFTER = 0.2;
@@ -261,11 +270,13 @@ public final class Constants {
     public static final double DISTANCE_WEIGHT = 7;
     public static final int TAG_PRESENCE_WEIGHT = 10;
 
+    public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+
     public static final Transform3d SHOOTER_CAMERA_TO_ROBOT = new Transform3d(
-      new Translation3d(Units.inchesToMeters(11)/*camera distance forwards from center*/,
+      new Translation3d(Units.inchesToMeters(10.75)/*camera distance forwards from center*/,
                                                   0.0/*camera distace laterally from center*/,
-                                                  0.343/*camera distance vertically from ground*/),
-                                new Rotation3d(0.0/*leave at 0*/,
+                        Units.inchesToMeters(2)/*camera distance vertically from ground*/),
+      new Rotation3d(Units.degreesToRadians(0)/*leave at 0*/,
                      Units.degreesToRadians(10),/*adjust if camera is mounted at an angle*/
                      Units.degreesToRadians(0)/*shooter is 0, ground intake is 180*/));
 

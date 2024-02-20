@@ -23,13 +23,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   final GlobalVariables m_Variables = new GlobalVariables();
+  final SUB_Vision m_vision = new SUB_Vision();
   // final SUB_Arm m_arm = new SUB_Arm();
   // final SUB_Intake m_Intake = new SUB_Intake();
   // final SUB_Shooter m_shooter = new SUB_Shooter();
   // final SUB_Climber m_Climber = new SUB_Climber();
   // final SUB_Limelight m_Limelight = new SUB_Limelight();
-  private final SUB_Drivetrain m_RobotDrive = new SUB_Drivetrain(m_Variables);
-  final SUB_PoseEstimator m_PoseEstimator = new SUB_PoseEstimator(m_RobotDrive, m_RobotDrive::getHeadingRotation2d, m_RobotDrive::getModulePositions);
+  private final SUB_Drivetrain m_RobotDrive = new SUB_Drivetrain(m_Variables, m_vision);
   // final SUB_TopShooter m_TopShooter = new SUB_TopShooter();
   // final SUB_BottomShooter m_BottomShooter = new SUB_BottomShooter();
   // final SUB_Shooter m_Shooter = new SUB_Shooter(m_TopShooter, m_BottomShooter);
