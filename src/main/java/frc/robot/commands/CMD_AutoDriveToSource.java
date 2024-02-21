@@ -14,8 +14,8 @@ import frc.robot.GlobalVariables.SourceSlot;
 import frc.robot.subsystems.SUB_Drivetrain;
 
 public class CMD_AutoDriveToSource extends Command{
-    SUB_Drivetrain m_drivetrain;
-    GlobalVariables m_Variables;
+    final SUB_Drivetrain m_drivetrain;
+    final GlobalVariables m_Variables;
     PathPlannerPath m_path;
     Command m_pathFindingCommand;
     DriverStation.Alliance m_Alliance;

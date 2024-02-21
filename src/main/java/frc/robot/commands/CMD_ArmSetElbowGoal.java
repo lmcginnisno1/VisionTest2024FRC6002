@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SUB_Arm;
 
 public class CMD_ArmSetElbowGoal extends Command {
-  SUB_Arm m_Arm;
+  final SUB_Arm m_Arm;
   double m_goal;
   public CMD_ArmSetElbowGoal(SUB_Arm p_Arm, double p_goal) {
     m_Arm = p_Arm;

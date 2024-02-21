@@ -9,9 +9,9 @@ import frc.robot.subsystems.SUB_Arm;
 import frc.robot.subsystems.SUB_BottomShooter;
 
 public class CMD_BottomShooterDefault extends Command {
-  SUB_BottomShooter m_BottomShooter;
-  SUB_Arm m_Arm;
-  GlobalVariables m_Variables;
+  final SUB_BottomShooter m_BottomShooter;
+  final SUB_Arm m_Arm;
+  final GlobalVariables m_Variables;
   Boolean m_idleMode;
 
   public CMD_BottomShooterDefault(SUB_BottomShooter p_BottomShooter, SUB_Arm p_Arm, GlobalVariables p_variables) {

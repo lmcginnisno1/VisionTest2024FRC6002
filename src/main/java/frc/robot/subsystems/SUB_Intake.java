@@ -13,7 +13,6 @@ public class SUB_Intake extends SubsystemBase{
     CANSparkMax m_groundIntakeMotor;
     CANSparkMax m_indexerMotor;
     DigitalInput m_indexerSensor = new DigitalInput(IntakeConstants.kIndexerSensorDigitalPort);
-    double HighestCurrent = Double.MIN_VALUE;
 
     public SUB_Intake(){
         m_groundIntakeMotor = new CANSparkMax(IntakeConstants.kGroundIntakeMotorCANId, MotorType.kBrushless);
@@ -50,9 +49,8 @@ public class SUB_Intake extends SubsystemBase{
     @Override
     public void periodic(){
         SmartDashboard.putNumber("ground intake current", m_groundIntakeMotor.getOutputCurrent());
-        if(m_groundIntakeMotor.getOutputCurrent() > HighestCurrent){
-            HighestCurrent = m_groundIntakeMotor.getAppliedOutput();
+        if(m_groundIntakeMotor.getAppliedOutput() > 0 && getIntakeSensor()){
+            stopGroundIntake();
         }
-        SmartDashboard.putNumber("highest ground intake current", HighestCurrent);
     }
 }

@@ -10,10 +10,10 @@ import frc.robot.subsystems.SUB_Drivetrain;
 import frc.robot.subsystems.SUB_Intake;
 
 public class CMD_ChaseDownNote extends Command{
-    SUB_Drivetrain m_drivetrain;
-    PhotonCamera m_backCamera = new PhotonCamera("note_finder_camera");
-    SUB_Intake m_intake;
-    Timer m_timer = new Timer();
+    final SUB_Drivetrain m_drivetrain;
+    final PhotonCamera m_backCamera = new PhotonCamera("note_finder_camera");
+    final SUB_Intake m_intake;
+    final Timer m_timer = new Timer();
     boolean m_isFinished;
     double target_yaw, target_area, heading_error, rot, xSpeed;
 

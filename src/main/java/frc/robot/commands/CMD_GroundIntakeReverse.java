@@ -5,7 +5,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.SUB_Intake;
 
 public class CMD_GroundIntakeReverse extends Command {
-  SUB_Intake m_intake;
+  final SUB_Intake m_intake;
   public CMD_GroundIntakeReverse(SUB_Intake p_intake) {
     m_intake = p_intake;
   }

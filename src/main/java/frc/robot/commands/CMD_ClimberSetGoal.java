@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SUB_Climber;
 
 public class CMD_ClimberSetGoal extends Command {
-  SUB_Climber m_Climber;
+  final SUB_Climber m_Climber;
   double m_goal;
   public CMD_ClimberSetGoal(SUB_Climber p_climber, double p_goal) {
     m_Climber = p_climber;
