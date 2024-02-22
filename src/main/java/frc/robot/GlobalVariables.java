@@ -7,9 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GlobalVariables extends SubsystemBase{
 
     private Pose2d m_robotPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-    private Pose2d m_limelightPose2d = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-    private double m_robotVelocity = 0.0;
     public double m_AngleToTarget = 0;
+    boolean m_readyToShoot = false;
 
     public enum SourceSlot{
         LEFT,
@@ -32,22 +31,6 @@ public class GlobalVariables extends SubsystemBase{
         return m_robotPose;
     }
 
-    public void setRobotVelocity(double p_robotVelocity){
-        m_robotVelocity = p_robotVelocity;
-    }
-
-    public double getRobotVelcoity(){
-        return m_robotVelocity;
-    }
-
-    public void setLimelightPose2d(Pose2d p_limelightPose2d){
-        m_limelightPose2d = p_limelightPose2d;
-    }
-
-    public Pose2d getLimelightPose2d(){
-        return m_limelightPose2d;
-    }
-
     public void setAngleToTarget(double p_angle){
         m_AngleToTarget = p_angle;
     }
@@ -62,5 +45,13 @@ public class GlobalVariables extends SubsystemBase{
 
     public SourceSlot getSelectedSourceSlot(){
         return m_SourceSlotSelected;
+    }
+
+    public void setReadyToShoot(boolean p_readyToShoot){
+        m_readyToShoot = p_readyToShoot;
+    }
+
+    public boolean ReadyToShoot(){
+        return m_readyToShoot;
     }
 }

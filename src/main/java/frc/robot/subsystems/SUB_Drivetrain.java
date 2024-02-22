@@ -66,8 +66,8 @@ public class SUB_Drivetrain extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
   ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0, 0, 0);
-  GlobalVariables m_variables;
-  SUB_Vision m_vision;
+  final GlobalVariables m_variables;
+  final SUB_Vision m_vision;
   double m_distanceToTarget = 0;
   double m_AngleToTarget = 0;
   // Odometry class for tracking robot pose
@@ -138,6 +138,8 @@ public class SUB_Drivetrain extends SubsystemBase {
         }
 
       }
+
+      m_variables.setAngleToTarget(m_AngleToTarget);
       
       telemetry();
   }

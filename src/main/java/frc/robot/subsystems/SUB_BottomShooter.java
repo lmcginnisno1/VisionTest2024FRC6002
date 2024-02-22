@@ -22,9 +22,6 @@ public class SUB_BottomShooter extends PIDSubsystem{
       new SimpleMotorFeedforward(
           ShooterConstants.kSBottom, ShooterConstants.kVBottom);
 
-    CANSparkMax m_ShooterFeederMotor;
-    double m_reference;
-
     public SUB_BottomShooter(){
         super(new PIDController(ShooterConstants.kBottomShooterP, ShooterConstants.kBottomShooterI, ShooterConstants.kBottomShooterD));
         getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
@@ -35,19 +32,11 @@ public class SUB_BottomShooter extends PIDSubsystem{
 
         m_BottomShooterMotorFollower = new CANSparkMax(ShooterConstants.kBottomShooterMotorFollowerCANId, MotorType.kBrushless);
         m_BottomShooterMotorFollower.setSmartCurrentLimit(ShooterConstants.kShooterCurrentLimit);
-        m_BottomShooterMotorFollower.setIdleMode(IdleMode.kCoast);
+        m_BottomShooterMotorFollower.setIdleMode(IdleMode.kCoast);  
         m_BottomShooterMotorFollower.follow(m_BottomShooterMotorMain);
 
         m_BottomShooterMotorMain.burnFlash();
         m_BottomShooterMotorFollower.burnFlash();
-    }
-
-    public void feederSet(double p_power){
-        m_ShooterFeederMotor.set(p_power);
-    }
-
-    public void feederOff(){
-        m_ShooterFeederMotor.set(0.0);
     }
 
     @Override
@@ -65,12 +54,11 @@ public class SUB_BottomShooter extends PIDSubsystem{
     }
 
     public void setSetpoint(int p_setpoint){
-        setSetpoint(p_setpoint);
+        setSetpoint((double)p_setpoint);
     }
 
     public void telemetry(){
         SmartDashboard.putNumber("Bottom shooter motor velocity", m_BottomShooterEncoder.getVelocity());
-        SmartDashboard.putNumber("expected Bottom RPM", m_reference);
         SmartDashboard.putNumber("Bottom Shooter P", m_controller.getP());
         SmartDashboard.putNumber("Bottom Shooter I", m_controller.getI());
         SmartDashboard.putNumber("Bottom Shooter D", m_controller.getD());

@@ -13,5 +13,4 @@ public class SUB_Shooter extends SubsystemBase{
         m_TopShooter = p_TopShooter;
         m_BottomShooter = p_BottomShooter;
     }
-    
 }

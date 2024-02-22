@@ -11,6 +11,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.GlobalVariables;
 import frc.robot.Constants.ArmConstants;
 
 public class SUB_Arm extends SubsystemBase{
@@ -33,7 +34,11 @@ public class SUB_Arm extends SubsystemBase{
     TrapezoidProfile.State m_ElbowGoal;
     TrapezoidProfile.State m_ElbowSetpoint;
 
-    public SUB_Arm(){
+    final GlobalVariables m_variables;
+
+    public SUB_Arm(GlobalVariables p_variables){
+        m_variables = p_variables;
+
         m_ShoulderMotor = new CANSparkMax(ArmConstants.kShoulderMotorCANId, MotorType.kBrushless);
         m_ShoulderPIDcontroller = m_ShoulderMotor.getPIDController();
         m_ShoulderEncoder = m_ShoulderMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -128,5 +133,10 @@ public class SUB_Arm extends SubsystemBase{
         m_ElbowSetpoint = m_ElbowProfile.calculate(0.02, m_ElbowSetpoint, m_ElbowGoal);
 
         setElbowReference(m_ElbowSetpoint.position);
+
+        if(m_variables.ReadyToShoot()){
+            m_ShoulderGoal = new TrapezoidProfile.State(90, 0);
+            m_ElbowGoal = new TrapezoidProfile.State(135, 0);
+        }
     }
 }
