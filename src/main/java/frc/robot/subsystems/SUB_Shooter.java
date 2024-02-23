@@ -13,6 +13,7 @@ public class SUB_Shooter extends SubsystemBase{
     final SUB_BottomShooter m_BottomShooter;
     final GlobalVariables m_variables;
     final LinearInterpolator m_shooterInterpolator = new LinearInterpolator(ShooterConstants.kShooterInterpolatorValues);
+    double interpolatedRPM = 0;
 
     public SUB_Shooter(SUB_TopShooter p_TopShooter, SUB_BottomShooter p_BottomShooter, GlobalVariables p_variables){
         m_TopShooter = p_TopShooter;
@@ -20,12 +21,22 @@ public class SUB_Shooter extends SubsystemBase{
         m_variables = p_variables;
     }
 
+    public double[] getShooterVelocites(){
+        //returns the velocites of both shooters, top shooter velocity is at index 0, then bottom shooter velocity at index 1
+        double[] velocites = {m_TopShooter.getMeasurement(), m_BottomShooter.getMeasurement()};
+        return velocites;
+    }
+
     @Override
     public void periodic(){
         if(m_variables.ReadyToShoot()){
-            double setpoint = m_shooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget());
-            m_TopShooter.setSetpoint(setpoint);
-            m_BottomShooter.setSetpoint(setpoint);
+            interpolatedRPM = m_shooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget());
+            m_TopShooter.setSetpoint(interpolatedRPM);
+            m_BottomShooter.setSetpoint(interpolatedRPM);
         }
+    }
+
+    public double getInterpolatedRPM(){
+        return interpolatedRPM;
     }
 }

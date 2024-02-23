@@ -11,6 +11,7 @@ import frc.robot.autos.*;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -24,13 +25,13 @@ public class RobotContainer {
   // The robot's subsystems
   final GlobalVariables m_Variables = new GlobalVariables();
   final SUB_Vision m_vision = new SUB_Vision();
-  // final SUB_Arm m_arm = new SUB_Arm();
-  // final SUB_Intake m_Intake = new SUB_Intake();
-  // final SUB_Climber m_Climber = new SUB_Climber();
+  final SUB_Intake m_Intake = new SUB_Intake();
+  final SUB_Climber m_Climber = new SUB_Climber();
+  final SUB_TopShooter m_TopShooter = new SUB_TopShooter();
+  final SUB_BottomShooter m_BottomShooter = new SUB_BottomShooter();
+  final SUB_Arm m_arm = new SUB_Arm(m_Variables);
   private final SUB_Drivetrain m_RobotDrive = new SUB_Drivetrain(m_Variables, m_vision);
-  // final SUB_TopShooter m_TopShooter = new SUB_TopShooter();
-  // final SUB_BottomShooter m_BottomShooter = new SUB_BottomShooter();
-  // final SUB_Shooter m_Shooter = new SUB_Shooter(m_TopShooter, m_BottomShooter);
+  final SUB_Shooter m_Shooter = new SUB_Shooter(m_TopShooter, m_BottomShooter, m_Variables);
 
 
   // The driver's controller
@@ -57,9 +58,8 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    //TODO: determine buttons to select left, middle, right auto drive to source location on operator controller
-    
-    // m_DriverController.a().onTrue(new CMD_GroundIntakeForward(m_Intake)).onFalse(new CMD_GroundIntakeOff(m_Intake));
+    m_DriverController.a().onTrue(new ConditionalCommand(new CMD_PrepShot(m_Intake, m_Variables),
+      new CMD_Shoot(m_Intake, m_Shooter, m_Variables), m_Variables::ReadyToShoot));
   }
 
   /**
