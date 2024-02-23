@@ -39,6 +39,10 @@ public class SUB_Intake extends SubsystemBase{
     }
 
     public void setGroundIntakePower(double p_power){
+        if(p_power > 0){
+            intaking = true;
+            setIndexerPower(p_power);
+        }
         m_groundIntakeMotor.set(p_power);
     }
 
@@ -76,6 +80,7 @@ public class SUB_Intake extends SubsystemBase{
         SmartDashboard.putNumber("ground intake current", m_groundIntakeMotor.getOutputCurrent());
         if(m_groundIntakeMotor.getAppliedOutput() > 0 && getIntakeSensor() && intaking){
             stopGroundIntake();
+            stopIndexer();
             intaking = false;
         }
     }

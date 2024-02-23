@@ -60,6 +60,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     m_DriverController.a().onTrue(new ConditionalCommand(new CMD_PrepShot(m_Intake, m_Variables),
       new CMD_Shoot(m_Intake, m_Shooter, m_Variables), m_Variables::ReadyToShoot));
+    m_DriverController.b().onTrue(new CMD_GroundIntakeForward(m_Intake));
   }
 
   /**
