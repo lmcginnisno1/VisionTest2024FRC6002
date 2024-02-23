@@ -140,6 +140,8 @@ public class SUB_Drivetrain extends SubsystemBase {
       }
 
       m_variables.setAngleToTarget(m_AngleToTarget);
+      m_variables.setDistanceToTarget(m_distanceToTarget);
+      m_variables.setRobotPose(getPose());
       
       telemetry();
   }

@@ -216,7 +216,16 @@ public final class Constants {
     public static final double kShooterMaxOutput = 1.0;
 
     public static final double kBottomShooterVelocityFF = 10.0;
-  }
+
+    public static final double[][] kShooterInterpolatorValues = {
+        {36, 2050}, 
+        {84, 2250}, 
+        {120, 2400}, 
+        {180, 3000},
+        {240, 3500},
+        {300, 4000},
+      };
+    }
 
   public static final class ArmConstants{
     public static final int kShoulderMotorCANId = 15;
@@ -237,6 +246,24 @@ public final class Constants {
 
     public static final double kElbowMaxVelocity = 1;
     public static final double kElbowMaxAcceleration = 3;
+
+    public static final double[][] kShoulderInterpolatorValues = {
+      {36, -45},
+      {84, -30},
+      {120, 0},
+      {180, 0},
+      {240, 5},
+      {300, 0}
+    };
+
+    public static final double[][] kElbowInterpolatorValues = {
+      {36, 45},
+      {84, 40},
+      {120, 35},
+      {180, 30},
+      {240, 25},
+      {300, 20}
+    };
   }
 
   public static final class ClimberConstants{

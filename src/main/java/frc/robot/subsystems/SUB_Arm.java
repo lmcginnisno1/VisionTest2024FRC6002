@@ -13,6 +13,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.GlobalVariables;
 import frc.robot.Constants.ArmConstants;
+import frc.utils.LinearInterpolator;
 
 public class SUB_Arm extends SubsystemBase{
     CANSparkMax m_ShoulderMotor;
@@ -35,6 +36,8 @@ public class SUB_Arm extends SubsystemBase{
     TrapezoidProfile.State m_ElbowSetpoint;
 
     final GlobalVariables m_variables;
+    final LinearInterpolator m_ShoulderInterpolator = new LinearInterpolator(ArmConstants.kShoulderInterpolatorValues);
+    final LinearInterpolator m_ElbowInterpolator = new LinearInterpolator(ArmConstants.kElbowInterpolatorValues);
 
     public SUB_Arm(GlobalVariables p_variables){
         m_variables = p_variables;
@@ -135,8 +138,8 @@ public class SUB_Arm extends SubsystemBase{
         setElbowReference(m_ElbowSetpoint.position);
 
         if(m_variables.ReadyToShoot()){
-            m_ShoulderGoal = new TrapezoidProfile.State(90, 0);
-            m_ElbowGoal = new TrapezoidProfile.State(135, 0);
+            m_ShoulderGoal = new TrapezoidProfile.State(m_ShoulderInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
+            m_ElbowGoal = new TrapezoidProfile.State(m_ElbowInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
         }
     }
 }

@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class GlobalVariables extends SubsystemBase{
 
     private Pose2d m_robotPose = new Pose2d(0.0, 0.0, new Rotation2d(0.0));
-    public double m_AngleToTarget = 0;
+    private double m_AngleToTarget = 0;
+    private double m_DistanceToTarget = 0;
     boolean m_readyToShoot = false;
 
     public enum SourceSlot{
@@ -37,6 +38,14 @@ public class GlobalVariables extends SubsystemBase{
 
     public double getAngleToTarget(){
         return m_AngleToTarget;
+    }
+
+    public void setDistanceToTarget(double p_distance){
+        m_DistanceToTarget = p_distance;
+    }
+
+    public double getDistanceToTarget(){
+        return m_DistanceToTarget;
     }
 
     public void SetSourceSlot(SourceSlot p_SourceSlot){

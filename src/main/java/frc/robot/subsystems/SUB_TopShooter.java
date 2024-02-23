@@ -48,10 +48,6 @@ public class SUB_TopShooter extends PIDSubsystem{
         return m_controller.atSetpoint();
     }
 
-    public void setSetpoint(int p_setpoint){
-        setSetpoint(p_setpoint);
-    }
-
     public void telemetry(){
         SmartDashboard.putNumber("Top shooter motor velocity", m_TopShooterEncoder.getVelocity());
         SmartDashboard.putNumber("expected Top RPM", m_reference);
