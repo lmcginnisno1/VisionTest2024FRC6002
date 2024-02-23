@@ -10,6 +10,7 @@ public class GlobalVariables extends SubsystemBase{
     private double m_AngleToTarget = 0;
     private double m_DistanceToTarget = 0;
     boolean m_readyToShoot = false;
+    boolean m_calibrationMode = false;
 
     public enum SourceSlot{
         LEFT,
@@ -62,5 +63,13 @@ public class GlobalVariables extends SubsystemBase{
 
     public boolean ReadyToShoot(){
         return m_readyToShoot;
+    }
+
+    public void setCalibrationMode(boolean p_calibrating){
+        m_calibrationMode = p_calibrating;
+    }
+
+    public boolean getCalibrationMode(){
+        return m_calibrationMode;
     }
 }

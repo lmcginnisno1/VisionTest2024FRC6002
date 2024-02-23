@@ -105,8 +105,10 @@ public class SUB_Drivetrain extends SubsystemBase {
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = m_vision.getEstimationStdDevs(estPose);
 
-                    m_odometry.addVisionMeasurement(
+                    if(!m_variables.getCalibrationMode()){
+                      m_odometry.addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    }
                 });
 
       SmartDashboard.putNumber("robot X", getPose().getX());
