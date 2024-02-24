@@ -332,6 +332,7 @@ public final class Constants {
 
   public static final class LedConstants{
     public static final int kLedStripPWMPort = 0;
+    public static final int kLedStripControllerIndex = 0;
     public static final int kLedStripLength = 60;
     public static final int kLedStripOffest = 0;
 
