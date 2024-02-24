@@ -20,6 +20,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.utils.led.Color;
+import frc.utils.led.pattern.BlinkPattern;
+import frc.utils.led.pattern.ChasePattern;
+import frc.utils.led.pattern.FadePattern;
+import frc.utils.led.pattern.MergeSortPattern;
+import frc.utils.led.pattern.RainbowPattern;
+import frc.utils.led.pattern.SolidColorPattern;
+import frc.utils.led.pattern.WavePattern;
+
 import com.pathplanner.lib.util.PIDConstants;
 
 /**
@@ -324,5 +333,18 @@ public final class Constants {
   public static final class LedConstants{
     public static final int kLedStripLength = 60;
     public static final int kLedStripOffest = 0;
+
+    public static final BlinkPattern kBlinkPattern = new BlinkPattern();
+    public static final ChasePattern kChasePattern = new ChasePattern();
+    public static final FadePattern kFadePattern = new FadePattern();
+    public static final MergeSortPattern kMergeSortPattern = new MergeSortPattern();
+    public static final RainbowPattern kRainbowPattern = new RainbowPattern();
+    public static final SolidColorPattern kSolidColorPattern = new SolidColorPattern();
+    public static final WavePattern kWavePattern = new WavePattern();
+
+    public static final Color kBrightOrange = new Color(39, 255, 255);
+    public static final Color kBrightGreen = new Color(96, 255, 255);
+    public static final Color kBrightRed = new Color(0, 255, 255);
+    public static final Color kMaroon = new Color(0, 255, 128);
   }
 }

@@ -23,12 +23,9 @@ public class SUB_Led extends SubsystemBase {
     m_ledStrip.setPatternDuration(duration);
   }
 
-  public void setPrimaryColor(Color color){
-    m_ledStrip.setPrimaryColor(color);
-  }
-
-  public void setSecondaryColor(Color color){
-    m_ledStrip.setSecondaryColor(color);
+  public void setLedColors(Color PrimaryColor, Color SecondaryColor){
+    m_ledStrip.setPrimaryColor(PrimaryColor);
+    m_ledStrip.setSecondaryColor(SecondaryColor);
   }
 
 

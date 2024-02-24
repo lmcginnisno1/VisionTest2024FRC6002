@@ -25,11 +25,11 @@ public class RobotContainer {
   // The robot's subsystems
   public final GlobalVariables m_Variables = new GlobalVariables();
   public final SUB_Led m_Led = new SUB_Led();
-  public final SUB_Intake m_Intake = new SUB_Intake();
   public final SUB_Climber m_Climber = new SUB_Climber();
   public final SUB_TopShooter m_TopShooter = new SUB_TopShooter();
   public final SUB_BottomShooter m_BottomShooter = new SUB_BottomShooter();
   public final SUB_Vision m_vision = new SUB_Vision();
+  public final SUB_Intake m_Intake = new SUB_Intake(m_Led, m_Variables);
   public final SUB_Arm m_arm = new SUB_Arm(m_Variables);
   public final SUB_Drivetrain m_RobotDrive = new SUB_Drivetrain(m_Variables, m_vision);
   public final SUB_Shooter m_Shooter = new SUB_Shooter(m_TopShooter, m_BottomShooter, m_Variables);
@@ -45,7 +45,7 @@ public class RobotContainer {
    */
   public RobotContainer(){
     // Configure the button bindings
-    // m_RobotDrive.setDefaultCommand(new CMD_Drive(m_RobotDrive, m_DriverController, m_Variables));
+    m_RobotDrive.setDefaultCommand(new CMD_Drive(m_RobotDrive, m_DriverController, m_Variables));
     configureButtonBindings();
   }
 
@@ -59,8 +59,8 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_DriverController.a().onTrue(new ConditionalCommand(new CMD_PrepShot(m_Intake, m_Variables),
-      new CMD_Shoot(m_Intake, m_Shooter, m_Variables), m_Variables::ReadyToShoot));
+    m_DriverController.a().onTrue(new ConditionalCommand(new CMD_PrepShot(m_Intake, m_Led, m_Variables),
+      new CMD_Shoot(m_Intake, m_Shooter, m_Led, m_Variables), m_Variables::ReadyToShoot));
     m_DriverController.b().onTrue(new CMD_GroundIntakeForward(m_Intake));
     m_DriverController.back().onTrue(new CMD_ToggleCalibrationMode(this));
   }
