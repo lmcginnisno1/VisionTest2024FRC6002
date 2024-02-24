@@ -320,4 +320,9 @@ public final class Constants {
     public static final double kFieldLengthMeters = 16.4846;
     public static final double kFieldWidthMeters = 8.1026;
   }
+
+  public static final class LedConstants{
+    public static final int kLedStripLength = 60;
+    public static final int kLedStripOffest = 0;
+  }
 }

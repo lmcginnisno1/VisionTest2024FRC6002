@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   public final GlobalVariables m_Variables = new GlobalVariables();
+  public final SUB_Led m_Led = new SUB_Led();
   public final SUB_Intake m_Intake = new SUB_Intake();
   public final SUB_Climber m_Climber = new SUB_Climber();
   public final SUB_TopShooter m_TopShooter = new SUB_TopShooter();
