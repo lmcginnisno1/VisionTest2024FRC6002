@@ -8,7 +8,7 @@ import frc.utils.CountingDelay;
 /**
  * A blinking pattern that can be applied to an LED strip.
  * This pattern will alternate between the primary and secondary colors.
- * @see frc.team4481.lib.feedback.led.LEDStrip
+ * @see frc.utils.led.LEDStrip
  */
 public class BlinkPattern implements LEDPattern {
 

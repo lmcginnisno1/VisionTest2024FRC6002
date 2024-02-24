@@ -7,7 +7,7 @@ import frc.utils.led.pattern.*;
  * A physical LED strip can be divided into multiple LED strip objects.
  * This allows for multiple patterns to be displayed on the same strip.
  * Each strip can have its own color, pattern, and duration.
- * @see frc.team4481.lib.feedback.led.Color
+ * @see frc.utils.led.Color
  */
 public class LEDStrip {
     private final int length;

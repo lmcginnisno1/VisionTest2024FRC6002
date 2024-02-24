@@ -10,8 +10,8 @@ package frc.utils.led;
  *
  * @see <a href="https://en.wikipedia.org/wiki/HSL_and_HSV">HSV on Wikipedia</a>
  * @see edu.wpi.first.wpilibj.AddressableLED
- * @see frc.team4481.lib.feedback.led.PWMLEDController
- * @see frc.team4481.lib.feedback.led.LEDStrip
+ * @see frc.utils.led.PWMLEDController
+ * @see frc.utils.led.LEDStrip
  */
 public class Color {
     private final RGB rgb;

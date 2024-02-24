@@ -10,7 +10,7 @@ import frc.utils.led.LEDStrip;
  * This pattern will override the hue of the primary color.
  * The saturation and value of the primary color are applied to the rainbow.
  * The secondary color is not used.
- * @see frc.team4481.lib.feedback.led.LEDStrip
+ * @see frc.utils.led.LEDStrip
  */
 public class RainbowPattern implements LEDPattern {
     // Constants

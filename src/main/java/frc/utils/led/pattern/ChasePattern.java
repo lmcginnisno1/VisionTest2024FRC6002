@@ -10,7 +10,7 @@ import frc.utils.led.LEDStrip;
  * This pattern will override the value of the primary color.
  * The hue and saturation of the primary color are applied to the chase.
  * The secondary color is not used.
- * @see frc.team4481.lib.feedback.led.LEDStrip
+ * @see frc.utils.led.LEDStrip
  */
 public class ChasePattern implements LEDPattern {
     private double valueShiftBuffer = 0;

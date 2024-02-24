@@ -6,7 +6,7 @@ import frc.utils.led.LEDStrip;
 
 /**
  * A solid color pattern that can be applied to an LED strip.
- * @see frc.team4481.lib.feedback.led.LEDStrip
+ * @see frc.utils.led.LEDStrip
  */
 public class SolidColorPattern implements LEDPattern {
     /**

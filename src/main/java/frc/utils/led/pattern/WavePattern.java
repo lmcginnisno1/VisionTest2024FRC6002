@@ -9,7 +9,7 @@ import frc.utils.led.LEDStrip;
  * A wave pattern that can be applied to an LED strip.
  * This pattern will interpolate between the primary and secondary colors.
  * These colors will shift over time.
- * @see frc.team4481.lib.feedback.led.LEDStrip
+ * @see frc.utils.led.LEDStrip
  */
 public class WavePattern implements LEDPattern {
     /**
