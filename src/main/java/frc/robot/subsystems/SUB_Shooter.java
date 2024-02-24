@@ -39,4 +39,9 @@ public class SUB_Shooter extends SubsystemBase{
     public double getInterpolatedRPM(){
         return interpolatedRPM;
     }
+
+    public void stopShooter(){
+        m_TopShooter.setSetpoint(0);
+        m_BottomShooter.setSetpoint(0);
+    }
 }

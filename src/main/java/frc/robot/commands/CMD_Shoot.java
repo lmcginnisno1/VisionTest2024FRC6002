@@ -38,6 +38,7 @@ public class CMD_Shoot extends Command{
             if(m_Timer.get() > 1){
                 m_intake.setIndexerPower(0);
                 isFinished = true;
+                m_shooter.stopShooter();
             }
         }
     }
