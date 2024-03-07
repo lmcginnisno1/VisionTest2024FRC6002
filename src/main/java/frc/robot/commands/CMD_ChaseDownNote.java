@@ -45,8 +45,8 @@ public class CMD_ChaseDownNote extends Command{
             heading_error = m_drivetrain.getPose().getRotation().getDegrees() - (180 + target_yaw);
 
             rot = heading_error * 0.002;
-            xSpeed = target_area / (Math.pow(target_area, 3));
-            MathUtil.clamp(xSpeed, 0.05, 0.75);
+            xSpeed = 1 / Math.pow(target_area, 3);
+            MathUtil.clamp (xSpeed, 0.05, 0.5);
         }else{
             target_yaw = 0;
             target_area = 0;

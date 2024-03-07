@@ -13,7 +13,7 @@ import frc.utils.led.pattern.LEDPattern;
 public class SUB_Led extends SubsystemBase {
   final PWMLEDController m_LedController;
   public SUB_Led() {
-    m_LedController =  new PWMLEDController(LedConstants.kLedStripPWMPort);
+    m_LedController = new PWMLEDController(LedConstants.kLedStripPWMPort);
     try{
       m_LedController.addStrip(new LEDStrip(LedConstants.kLedStripLength, LedConstants.kLedStripOffest));
     }catch(DuplicateLEDAssignmentException e){

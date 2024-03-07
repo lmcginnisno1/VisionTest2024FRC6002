@@ -63,6 +63,7 @@ public class RobotContainer {
       new CMD_Shoot(m_Intake, m_Shooter, m_Led, m_Variables), m_Variables::ReadyToShoot));
     m_DriverController.b().onTrue(new CMD_GroundIntakeForward(m_Intake));
     m_DriverController.back().onTrue(new CMD_ToggleCalibrationMode(this));
+    m_DriverController.leftTrigger().whileTrue(new CMD_ChaseDownNote(m_RobotDrive, m_Intake));
   }
 
   /**
