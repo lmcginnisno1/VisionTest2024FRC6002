@@ -25,6 +25,7 @@ public class CMD_ChaseDownNote extends Command{
     @Override
     public void initialize(){
         m_isFinished = false;
+        // turn on intake
         m_intake.setGroundIntakePower(Constants.IntakeConstants.kIntakeForward);
         m_intake.setIndexerPower(Constants.IntakeConstants.kIndexerForward);
         m_timer.reset();
@@ -40,28 +41,42 @@ public class CMD_ChaseDownNote extends Command{
     @Override
     public void execute(){
         if(m_backCamera.getLatestResult().hasTargets()){
+            //get the latest results from the "best tartget"
             target_yaw = m_backCamera.getLatestResult().getBestTarget().getYaw();
             target_area = m_backCamera.getLatestResult().getBestTarget().getArea();
             heading_error = m_drivetrain.getPose().getRotation().getDegrees() - (180 + target_yaw);
 
+            //determine how fast to turn to the note and drive at the note
             rot = heading_error * 0.002;
             xSpeed = 1 / Math.pow(target_area, 3);
+            //limit the speed so we have time to stop the command if a robot is going to collide with us
             MathUtil.clamp (xSpeed, 0.05, 0.5);
         }else{
+            //no target, keep moving but slower and stop rotating
             target_yaw = 0;
             target_area = 0;
             heading_error = 0;
             rot = 0;
-            xSpeed = 0;
+            xSpeed = 0.1;
         }
 
         m_drivetrain.drive(xSpeed, 0, rot, false, true);
 
         if(m_intake.getIntakeSensor() || m_timer.get() > 10){
+            //if the intake sensor trips or the command takes to long, turn of intake and exit command
             m_intake.setGroundIntakePower(Constants.IntakeConstants.kIntakeOff);
             m_intake.setIndexerPower(Constants.IntakeConstants.kIndexerOff);
             m_drivetrain.drive(0, 0, 0, false, true);
             m_isFinished = true;
+        }
+    }
+
+    @Override public void end(boolean interrupted){
+        if(interrupted){
+            //if command gets interrupted stop intake and drivetrain
+            m_intake.setGroundIntakePower(Constants.IntakeConstants.kIntakeOff);
+            m_intake.setIndexerPower(Constants.IntakeConstants.kIndexerOff);
+            m_drivetrain.drive(0, 0, 0, false, true);
         }
     }
 
