@@ -15,6 +15,7 @@ public class SUB_BottomShooter extends PIDSubsystem{
     final CANSparkMax m_BottomShooterMotorMain;
     final CANSparkMax m_BottomShooterMotorFollower;
     final RelativeEncoder m_BottomShooterEncoder;
+    double setpoint;
 
     private final SimpleMotorFeedforward m_BottomShooterFeedforward =
       new SimpleMotorFeedforward(
@@ -36,6 +37,8 @@ public class SUB_BottomShooter extends PIDSubsystem{
 
         m_BottomShooterMotorMain.burnFlash();
         m_BottomShooterMotorFollower.burnFlash();
+        setSetpoint(0);
+        m_BottomShooterEncoder.setPosition(0);
     }
 
     @Override
@@ -68,7 +71,14 @@ public class SUB_BottomShooter extends PIDSubsystem{
 
     @Override
     public void periodic(){
-        super.periodic();
+        // super.periodic();
+        setpoint += 0.001;
+        setSetpoint(setpoint);
+        if(m_BottomShooterEncoder.getPosition() > 0){
+            SmartDashboard.putNumber("bottom shooter kS", setpoint - 0.001);
+            setpoint = 0;
+            setSetpoint(setpoint);
+        }
         telemetry();
     }
 }

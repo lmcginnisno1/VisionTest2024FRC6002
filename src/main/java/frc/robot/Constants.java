@@ -347,9 +347,9 @@ public final class Constants {
   }
 
   public static final class LedConstants{
-    public static final int kLedStripPWMPort = 2;
+    public static final int kLedStripPWMPort = 9;
     public static final int kLedStripControllerIndex = 0;
-    public static final int kLedStripLength = 60;
+    public static final int kLedStripLength = 26;
     public static final int kLedStripOffest = 0;
 
     public static final BlinkPattern kBlinkPattern = new BlinkPattern();

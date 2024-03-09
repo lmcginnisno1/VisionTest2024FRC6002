@@ -34,4 +34,9 @@ public class SUB_Led extends SubsystemBase {
     m_LedController.getStrip(LedConstants.kLedStripControllerIndex).setPrimaryColor(PrimaryColor);
     m_LedController.getStrip(LedConstants.kLedStripControllerIndex).setSecondaryColor(SecondaryColor);
   }
+
+  @Override
+  public void periodic(){
+    m_LedController.updateStrips();
+  }
 }
