@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -13,21 +12,19 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ShooterConstants;
 
 public class SUB_TopShooter extends PIDSubsystem{
-    CANSparkMax m_TopShooterMotor;
-    SparkPIDController m_TopShooterPIDcontroller;
-    RelativeEncoder m_TopShooterEncoder;
+    final CANSparkMax m_TopShooterMotor;
+    final RelativeEncoder m_TopShooterEncoder;
 
     private final SimpleMotorFeedforward m_TopShooterFeedforward =
       new SimpleMotorFeedforward(
           ShooterConstants.kSTop, ShooterConstants.kVTop);
-
-    double m_reference;
 
     public SUB_TopShooter(){
         super(new PIDController(ShooterConstants.kTopShooterP, ShooterConstants.kTopShooterI, ShooterConstants.kTopShooterD));
         getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
         setSetpoint(0);
         m_TopShooterMotor = new CANSparkMax(ShooterConstants.kTopShooterMotorCANId, MotorType.kBrushless);
+        m_TopShooterEncoder = m_TopShooterMotor.getEncoder();
         m_TopShooterMotor.setIdleMode(IdleMode.kCoast);
         m_TopShooterMotor.setSmartCurrentLimit(ShooterConstants.kShooterCurrentLimit);
 
@@ -50,7 +47,6 @@ public class SUB_TopShooter extends PIDSubsystem{
 
     public void telemetry(){
         SmartDashboard.putNumber("Top shooter motor velocity", m_TopShooterEncoder.getVelocity());
-        SmartDashboard.putNumber("expected Top RPM", m_reference);
         SmartDashboard.putNumber("Top Shooter P", m_controller.getP());
         SmartDashboard.putNumber("Top Shooter I", m_controller.getI());
         SmartDashboard.putNumber("Top Shooter D", m_controller.getD());

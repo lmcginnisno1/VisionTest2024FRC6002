@@ -80,24 +80,24 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    // public static final int kFrontLeftDrivingCanId = 2;
-    // public static final int kFrontLeftTurningCanId = 1;
-    // public static final int kFrontRightDrivingCanId = 4;
-    // public static final int kFrontRightTurningCanId = 3;
-    // public static final int kRearLeftDrivingCanId = 6;
-    // public static final int kRearLeftTurningCanId = 5;
-    // public static final int kRearRightDrivingCanId = 8;
-    // public static final int kRearRightTurningCanId = 7;
+    public static final int kFrontLeftDrivingCanId = 2;
+    public static final int kFrontLeftTurningCanId = 1;
+    public static final int kFrontRightDrivingCanId = 4;
+    public static final int kFrontRightTurningCanId = 3;
+    public static final int kRearLeftDrivingCanId = 6;
+    public static final int kRearLeftTurningCanId = 5;
+    public static final int kRearRightDrivingCanId = 8;
+    public static final int kRearRightTurningCanId = 7;
 
-    public static final int kFrontLeftDrivingCanId = 14;
-    public static final int kRearLeftDrivingCanId = 15;
-    public static final int kFrontRightDrivingCanId = 5;
-    public static final int kRearRightDrivingCanId = 4;
+    // public static final int kFrontLeftDrivingCanId = 14;
+    // public static final int kRearLeftDrivingCanId = 15;
+    // public static final int kFrontRightDrivingCanId = 5;
+    // public static final int kRearRightDrivingCanId = 4;
 
-    public static final int kFrontLeftTurningCanId = 13;
-    public static final int kRearLeftTurningCanId = 16;
-    public static final int kFrontRightTurningCanId = 6;
-    public static final int kRearRightTurningCanId = 3;
+    // public static final int kFrontLeftTurningCanId = 13;
+    // public static final int kRearLeftTurningCanId = 16;
+    // public static final int kFrontRightTurningCanId = 6;
+    // public static final int kRearRightTurningCanId = 3;
 
     public static final boolean kGyroReversed = false;
   }
@@ -331,7 +331,7 @@ public final class Constants {
   }
 
   public static final class LedConstants{
-    public static final int kLedStripPWMPort = 0;
+    public static final int kLedStripPWMPort = 2;
     public static final int kLedStripControllerIndex = 0;
     public static final int kLedStripLength = 60;
     public static final int kLedStripOffest = 0;

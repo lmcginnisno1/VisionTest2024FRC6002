@@ -71,14 +71,15 @@ public class SUB_Drivetrain extends SubsystemBase {
   double m_distanceToTarget = 0;
   double m_AngleToTarget = 0;
   // Odometry class for tracking robot pose
-  SwerveDrivePoseEstimator m_odometry = 
-    new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, getHeadingRotation2d(), getModulePositions(), getPose(),
-    VisionConstants.stateStdDevs, VisionConstants.visionStdDevs);
+  final SwerveDrivePoseEstimator m_odometry;
 
   /** Creates a new DriveSubsystem. */
   public SUB_Drivetrain(GlobalVariables p_variables, SUB_Vision p_vision) {
     m_variables = p_variables;
     m_vision = p_vision;
+
+    m_odometry = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, getHeadingRotation2d(), getModulePositions(),
+      new Pose2d(0, 0, new Rotation2d(0)), VisionConstants.stateStdDevs, VisionConstants.visionStdDevs);
 
     AutoBuilder.configureHolonomic(
       this::getPose, // Robot pose supplier

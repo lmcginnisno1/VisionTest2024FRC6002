@@ -44,13 +44,14 @@ public class CMD_ChaseDownNote extends Command{
             //get the latest results from the "best tartget"
             target_yaw = m_backCamera.getLatestResult().getBestTarget().getYaw();
             target_area = m_backCamera.getLatestResult().getBestTarget().getArea();
+            //calculate heading error frm the note, yaw of target is added to 180 because we intake from the back of the robot
             heading_error = m_drivetrain.getPose().getRotation().getDegrees() - (180 + target_yaw);
 
             //determine how fast to turn to the note and drive at the note
             rot = heading_error * 0.002;
             xSpeed = 1 / Math.pow(target_area, 3);
-            //limit the speed so we have time to stop the command if a robot is going to collide with us
-            MathUtil.clamp (xSpeed, 0.05, 0.5);
+            //speed limit
+            xSpeed = MathUtil.clamp(xSpeed, 0.05, 0.5);
         }else{
             //no target, keep moving but slower and stop rotating
             target_yaw = 0;

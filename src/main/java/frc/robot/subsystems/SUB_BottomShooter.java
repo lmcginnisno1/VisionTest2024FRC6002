@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -13,10 +12,9 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ShooterConstants;
 
 public class SUB_BottomShooter extends PIDSubsystem{
-    CANSparkMax m_BottomShooterMotorMain;
-    CANSparkMax m_BottomShooterMotorFollower;
-    SparkPIDController m_BottomShooterPIDcontroller;
-    RelativeEncoder m_BottomShooterEncoder;
+    final CANSparkMax m_BottomShooterMotorMain;
+    final CANSparkMax m_BottomShooterMotorFollower;
+    final RelativeEncoder m_BottomShooterEncoder;
 
     private final SimpleMotorFeedforward m_BottomShooterFeedforward =
       new SimpleMotorFeedforward(
@@ -27,6 +25,7 @@ public class SUB_BottomShooter extends PIDSubsystem{
         getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
         setSetpoint(0);
         m_BottomShooterMotorMain = new CANSparkMax(ShooterConstants.kBottomShooterMotorMainCANId, MotorType.kBrushless);
+        m_BottomShooterEncoder = m_BottomShooterMotorMain.getEncoder();
         m_BottomShooterMotorMain.setIdleMode(IdleMode.kCoast);
         m_BottomShooterMotorMain.setSmartCurrentLimit(ShooterConstants.kShooterCurrentLimit);
 

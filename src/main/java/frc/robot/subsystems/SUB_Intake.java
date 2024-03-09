@@ -18,11 +18,11 @@ import frc.robot.GlobalVariables.IntakeMode;
 public class SUB_Intake extends SubsystemBase{
     final SUB_Led m_Led;
     final GlobalVariables m_variables;
-    CANSparkMax m_groundIntakeMotor;
-    CANSparkMax m_indexerMotor;
-    DigitalInput m_indexerSensor = new DigitalInput(IntakeConstants.kIndexerSensorDigitalPort);
-    RelativeEncoder m_indexerEncoder;
-    SparkPIDController m_indexerController;
+    final CANSparkMax m_groundIntakeMotor;
+    final CANSparkMax m_indexerMotor;
+    final DigitalInput m_indexerSensor = new DigitalInput(IntakeConstants.kIndexerSensorDigitalPort);
+    final RelativeEncoder m_indexerEncoder;
+    final SparkPIDController m_indexerController;
     boolean intaking = false;
 
     public SUB_Intake(SUB_Led p_Led, GlobalVariables p_variables){
@@ -30,7 +30,7 @@ public class SUB_Intake extends SubsystemBase{
         m_variables = p_variables;
         m_groundIntakeMotor = new CANSparkMax(IntakeConstants.kGroundIntakeMotorCANId, MotorType.kBrushless);
         m_groundIntakeMotor.setIdleMode(IdleMode.kBrake);
-        m_indexerMotor.setSmartCurrentLimit(IntakeConstants.kGroundIntakeCurrentLimit);
+        m_groundIntakeMotor.setSmartCurrentLimit(IntakeConstants.kGroundIntakeCurrentLimit);
         m_groundIntakeMotor.burnFlash();
 
         m_indexerMotor = new CANSparkMax(IntakeConstants.kIndexerMotorCANId, MotorType.kBrushless);
