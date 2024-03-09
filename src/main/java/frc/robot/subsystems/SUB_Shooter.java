@@ -29,11 +29,11 @@ public class SUB_Shooter extends SubsystemBase{
 
     @Override
     public void periodic(){
-        if(m_variables.ReadyToShoot()){
-            interpolatedRPM = m_shooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget());
-            m_TopShooter.setSetpoint(interpolatedRPM);
-            m_BottomShooter.setSetpoint(interpolatedRPM);
-        }
+        // if(m_variables.ReadyToShoot()){
+        //     interpolatedRPM = m_shooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget());
+        //     m_TopShooter.setSetpoint(interpolatedRPM);
+        //     m_BottomShooter.setSetpoint(interpolatedRPM);
+        // }
     }
 
     public double getInterpolatedRPM(){

@@ -182,7 +182,7 @@ public final class Constants {
   public static final class IntakeConstants {
     public static final int kGroundIntakeMotorCANId = 11;
     public static final int kIndexerMotorCANId = 13;
-    public static final int kIndexerSensorDigitalPort = 1;
+    public static final int kIndexerSensorDigitalPort = 9;
 
     public static final double kIntakeForward = 0.25;
     public static final double kIntakeOff = 0.0;
@@ -237,24 +237,40 @@ public final class Constants {
     }
 
   public static final class ArmConstants{
-    public static final int kShoulderMotorCANId = 15;
-    public static final int kElbowMotorCANId = 16;
+    public static final int kShoulderMotorMainCANId = 9;
+    public static final int kShoulderFollowerCANId = 10;
+    public static final int kElbowMotorCANId = 14;
 
-    public static final double kShoulderMotorP = 0.0;
-    public static final double kShoulderMotorI = 0.0;
-    public static final double kShoulderMotorD = 0.0;
-    public static final double kShoulderMotorFF = 0.0;
+    public static final int kShoulderCurrentLimit = 40;
+    public static final int kElbowCurrentLimit = 40;
 
-    public static final double kElbowMotorP = 0.0;
-    public static final double kElbowMotorI = 0.0;
-    public static final double kElbowMotorD = 0.0;
-    public static final double kElbowMotorFF = 0.0;
+    public static final double kShoulderP = 2.1;
+    public static final double kShoulderI = 0;
+    public static final double kShoulderD = 0;
+    public static final double kShoulderFF = 0.0;
 
-    public static final double kShoulderMaxVelocity = 1;
-    public static final double kShoulderMaxAcceleration = 3;
+    public static final double kSVolts = 0.1;
+    public static final double kGVolts = 0.2394;
 
-    public static final double kElbowMaxVelocity = 1;
-    public static final double kElbowMaxAcceleration = 3;
+    public static final double kShoulderMaxVelocityRadPerSecond = 6.1;
+    public static final double kShoulderMaxAccelerationRadPerSecSquared = 8.1;
+
+    public static final double kShoulderPositionConversionFactor = Math.PI * 2; // radians
+    public static final double kShoulderVelocityConversionFactor = kShoulderPositionConversionFactor / 60; // radians per second
+
+    public static final double kElbowP = 1.55;
+    public static final double kElbowI = 0;
+    public static final double kElbowD = 0.0;
+    public static final double kElbowFF = 0.0;
+    
+    public static final double kElbowSVolts = 0;
+    public static final double kElbowGVolts = 0.22;
+
+    public static final double kElbowMaxVelocityRadPerSecond = 6.1;
+    public static final double kElbowMaxAccelerationRadPerSecSquared = 6.1;
+
+    public static final double kElbowPositionConversionFactor = (Math.PI * 2) / 3; // 3:1 ratio to shaft
+    public static final double kElbowVelocityConversionFactor = kElbowPositionConversionFactor / 60;
 
     public static final double[][] kShoulderInterpolatorValues = {
       {36, -45},
@@ -292,7 +308,7 @@ public final class Constants {
   }
 
   public static final class VisionConstants{
-    public static final String kCameraName = "shooter_camera";
+    public static final String kCameraName = "ShooterCam";
 
     public static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
     public static final Vector<N3> VisionSingleTagStdDevs = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(10));

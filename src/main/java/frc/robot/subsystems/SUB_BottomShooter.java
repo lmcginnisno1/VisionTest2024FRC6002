@@ -54,6 +54,8 @@ public class SUB_BottomShooter extends PIDSubsystem{
 
     public void telemetry(){
         SmartDashboard.putNumber("Bottom shooter motor velocity", m_BottomShooterEncoder.getVelocity());
+        SmartDashboard.putNumber("Bottom shooter commanded velocity", 0);
+        setSetpoint(SmartDashboard.getNumber("Bottom shooter commanded velocity", getSetpoint()));
         SmartDashboard.putNumber("Bottom Shooter P", m_controller.getP());
         SmartDashboard.putNumber("Bottom Shooter I", m_controller.getI());
         SmartDashboard.putNumber("Bottom Shooter D", m_controller.getD());
