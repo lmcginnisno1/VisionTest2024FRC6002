@@ -49,9 +49,9 @@ public class CMD_ChaseDownNote extends Command{
 
             //determine how fast to turn to the note and drive at the note
             rot = heading_error * 0.002;
-            xSpeed = 1 / Math.pow(target_area, 3);
+            xSpeed = 1 / target_area;
             //speed limit
-            xSpeed = MathUtil.clamp(xSpeed, 0.05, 0.5);
+            xSpeed = MathUtil.clamp(xSpeed, 0, 0.25);
         }else{
             //no target, keep moving but slower and stop rotating
             target_yaw = 0;
@@ -65,20 +65,15 @@ public class CMD_ChaseDownNote extends Command{
 
         if(m_intake.getIntakeSensor() || m_timer.get() > 10){
             //if the intake sensor trips or the command takes to long, turn of intake and exit command
-            m_intake.setGroundIntakePower(Constants.IntakeConstants.kIntakeOff);
-            m_intake.setIndexerPower(Constants.IntakeConstants.kIndexerOff);
-            m_drivetrain.drive(0, 0, 0, false, true);
             m_isFinished = true;
         }
     }
 
     @Override public void end(boolean interrupted){
-        if(interrupted){
-            //if command gets interrupted stop intake and drivetrain
-            m_intake.setGroundIntakePower(Constants.IntakeConstants.kIntakeOff);
-            m_intake.setIndexerPower(Constants.IntakeConstants.kIndexerOff);
-            m_drivetrain.drive(0, 0, 0, false, true);
-        }
+        //if command gets interrupted or stops normally, stop intake and drivetrain
+        m_intake.setGroundIntakePower(Constants.IntakeConstants.kIntakeOff);
+        m_intake.setIndexerPower(Constants.IntakeConstants.kIndexerOff);
+        m_drivetrain.drive(0, 0, 0, false, true);
     }
 
     @Override

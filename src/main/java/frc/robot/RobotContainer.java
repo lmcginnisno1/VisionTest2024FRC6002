@@ -5,9 +5,13 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
-import frc.robot.autos.*;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +43,7 @@ public class RobotContainer {
   CommandXboxController m_DriverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   XboxController m_DriverControllerHI = new XboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_OperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+  SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -47,6 +52,8 @@ public class RobotContainer {
     // Configure the button bindings
     m_RobotDrive.setDefaultCommand(new CMD_Drive(m_RobotDrive, m_DriverController, m_Variables));
     configureButtonBindings();
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData(autoChooser);
   }
 
   /**
@@ -72,6 +79,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new BackAndForth(m_RobotDrive);
+    return autoChooser.getSelected();
   }
 }
