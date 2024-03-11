@@ -339,6 +339,36 @@ public final class Constants {
                                 new Rotation3d(0.0/*leave at 0*/,
                      Units.degreesToRadians(20),/*adjust if camera is mounted at an angle*/
                      Units.degreesToRadians(180)/*shooter is 0, ground intake is 180*/));
+
+    public static final double[][] NoteDistanceInterpolatorValues = {
+      {45, 1},
+      {10, 2},
+      {5, 3},
+      {4, 4},
+      {2, 5},
+      {1.5, 6},
+      {1.25, 7},
+      {1, 8},
+      {0.75, 9},
+      {0.6, 10},
+      {0.45, 11},
+      {0.4, 12}
+    };
+
+    public static final double[][] ChaseSpeedInterpolatorValues = {
+      {1, 0.2},
+      {2, 0.25},
+      {3, 0.3},
+      {4, 0.35},
+      {5, 0.4},
+      {6, 0.45},
+      {7, 0.5},
+      {8, 0.55},
+      {9, 0.6},
+      {10, 0.65},
+      {11, 0.7},
+      {12, 0.75}
+    };
   }
 
   public static final class FieldConstants{

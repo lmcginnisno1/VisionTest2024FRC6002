@@ -17,7 +17,7 @@ public class SUB_BottomShooter extends PIDSubsystem{
     final RelativeEncoder m_BottomShooterEncoder;
     double setpoint;
 
-    private final SimpleMotorFeedforward m_BottomShooterFeedforward =
+    private SimpleMotorFeedforward m_BottomShooterFeedforward =
       new SimpleMotorFeedforward(
           ShooterConstants.kSBottom, ShooterConstants.kVBottom);
 
@@ -62,22 +62,27 @@ public class SUB_BottomShooter extends PIDSubsystem{
         SmartDashboard.putNumber("Bottom Shooter P", m_controller.getP());
         SmartDashboard.putNumber("Bottom Shooter I", m_controller.getI());
         SmartDashboard.putNumber("Bottom Shooter D", m_controller.getD());
+        SmartDashboard.putNumber("Bottom shooter kS", m_BottomShooterFeedforward.ks);
+        SmartDashboard.putNumber("Bottom shooter kV", m_BottomShooterFeedforward.kv);
         
         m_controller.setPID(SmartDashboard.getNumber("Bottom Shooter P", m_controller.getP()),
                             SmartDashboard.getNumber("Bottom Shooter I", m_controller.getI()),
                             SmartDashboard.getNumber("Bottom Shooter D", m_controller.getD())
         );
+
+        m_BottomShooterFeedforward = new SimpleMotorFeedforward(SmartDashboard.getNumber("Bottom shooter kS", 0),
+            SmartDashboard.getNumber("Bottom shooter kV", 0));
     }
 
     @Override
     public void periodic(){
         // super.periodic();
         setpoint += 0.001;
-        setSetpoint(setpoint);
+        m_BottomShooterMotorMain.setVoltage(setpoint);
         if(m_BottomShooterEncoder.getPosition() > 0){
             SmartDashboard.putNumber("bottom shooter kS", setpoint - 0.001);
             setpoint = 0;
-            setSetpoint(setpoint);
+            m_BottomShooterMotorMain.setVoltage(setpoint);
         }
         telemetry();
     }

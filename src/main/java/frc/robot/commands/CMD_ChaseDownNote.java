@@ -6,8 +6,10 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SUB_Drivetrain;
 import frc.robot.subsystems.SUB_Intake;
+import frc.utils.LinearInterpolator;
 
 public class CMD_ChaseDownNote extends Command{
     final SUB_Drivetrain m_drivetrain;
@@ -16,6 +18,8 @@ public class CMD_ChaseDownNote extends Command{
     final Timer m_timer = new Timer();
     boolean m_isFinished;
     double target_yaw, target_area, heading_error, rot, xSpeed;
+    final LinearInterpolator NoteDistanceInterpolator = new LinearInterpolator(VisionConstants.NoteDistanceInterpolatorValues);
+    final LinearInterpolator ChaseSpeedInterpolator = new LinearInterpolator(VisionConstants.ChaseSpeedInterpolatorValues);
 
     public CMD_ChaseDownNote(SUB_Drivetrain p_drivetrain, SUB_Intake p_intake){
         m_drivetrain = p_drivetrain;
@@ -49,7 +53,7 @@ public class CMD_ChaseDownNote extends Command{
 
             //determine how fast to turn to the note and drive at the note
             rot = heading_error * 0.002;
-            xSpeed = 1 / target_area;
+            xSpeed = ChaseSpeedInterpolator.getInterpolatedValue(NoteDistanceInterpolator.getInterpolatedValue(target_area));
             //speed limit
             xSpeed = MathUtil.clamp(xSpeed, 0, 0.25);
         }else{
@@ -58,7 +62,7 @@ public class CMD_ChaseDownNote extends Command{
             target_area = 0;
             heading_error = 0;
             rot = 0;
-            xSpeed = 0.1;
+            xSpeed = 0.2;
         }
 
         m_drivetrain.drive(xSpeed, 0, rot, false, true);
