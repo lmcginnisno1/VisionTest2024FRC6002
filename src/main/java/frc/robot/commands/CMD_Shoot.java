@@ -12,7 +12,7 @@ public class CMD_Shoot extends Command{
     final SUB_Intake m_intake;
     final SUB_Shooter m_shooter;
     final SUB_Led m_led;
-    final GlobalVariables m_globalVariables;
+    final GlobalVariables m_variables;
     boolean isFinished = false;
     boolean flywheelsAtSpeed = false;
     Timer m_Timer = new Timer();
@@ -21,7 +21,7 @@ public class CMD_Shoot extends Command{
         m_intake = p_intake;
         m_shooter = p_shooter;
         m_led = p_led;
-        m_globalVariables = p_variables;
+        m_variables = p_variables;
     }
 
     @Override
@@ -33,19 +33,11 @@ public class CMD_Shoot extends Command{
     }
 
     @Override public void execute(){
-        double [] shooterVelocites = m_shooter.getShooterVelocites();
-        flywheelsAtSpeed = Math.abs(shooterVelocites[0] - m_shooter.getInterpolatedRPM()) < 50 &&
-                           Math.abs(shooterVelocites[1] - m_shooter.getInterpolatedRPM()) < 50;
-        if(flywheelsAtSpeed){
-            m_Timer.start();
-            m_intake.setIndexerPower(1);
-            if(m_Timer.get() > 1){
-                m_intake.setIndexerPower(0);
-                isFinished = true;
-                m_shooter.stopShooter();
-                m_led.setPattern(LedConstants.kSolidColorPattern);
-                m_led.setLedColors(LedConstants.kBrightRed, LedConstants.kBrightRed);
-            }
+        m_led.setLedColors(LedConstants.kBrightGreen, LedConstants.kBrightGreen);
+        m_led.setPattern(LedConstants.kChasePattern);
+        m_led.setPatternDuration(1 / (m_shooter.getShooterVelocites()[1] / 500));
+        if(m_variables.getDistanceToTarget() <=5){
+            
         }
     }
 

@@ -20,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.utils.LinearInterpolator;
 import frc.utils.led.Color;
 import frc.utils.led.pattern.BlinkPattern;
 import frc.utils.led.pattern.ChasePattern;
@@ -234,6 +235,8 @@ public final class Constants {
         {240, 3500},
         {300, 4000},
       };
+
+      public static final LinearInterpolator kShooterInterpolator = new LinearInterpolator(kShooterInterpolatorValues);
     }
 
   public static final class ArmConstants{
@@ -272,6 +275,14 @@ public final class Constants {
     public static final double kElbowPositionConversionFactor = (Math.PI * 2) / 3; // 3:1 ratio to shaft
     public static final double kElbowVelocityConversionFactor = kElbowPositionConversionFactor / 60;
 
+    public static final double kShoulderHome = -45;//degrees
+    public static final double kElbowHome = 10; 
+    public static final double kElbowAmp = 18.5; 
+    public static final double kElbowGroundIntake =45;
+
+    public static final double kTolerance = 1;
+
+
     public static final double[][] kShoulderInterpolatorValues = {
       {36, -45},
       {84, -30},
@@ -289,6 +300,10 @@ public final class Constants {
       {240, 25},
       {300, 20}
     };
+
+    public static final LinearInterpolator kShoulderInterpolator = new LinearInterpolator(kShoulderInterpolatorValues);
+    public static final LinearInterpolator kElbowInterpolator = new LinearInterpolator(kElbowInterpolatorValues);
+
   }
 
   public static final class ClimberConstants{

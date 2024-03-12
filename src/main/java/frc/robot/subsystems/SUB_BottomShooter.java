@@ -51,6 +51,10 @@ public class SUB_BottomShooter extends PIDSubsystem{
         return (double)m_BottomShooterEncoder.getVelocity();
     }
 
+    public void setVoltage(double p_voltage){
+        m_BottomShooterMotorMain.setVoltage(p_voltage);
+    }
+
     public boolean atSetpoint() {
         return m_controller.atSetpoint();
     }

@@ -27,13 +27,28 @@ public class SUB_Shooter extends SubsystemBase{
         return velocites;
     }
 
+    public void setShooterVoltage(double p_voltage){
+        m_TopShooter.setVoltage(p_voltage);
+        m_BottomShooter.setVoltage(p_voltage);
+    }
+
+    public void setSetpoint(double p_setpoint){
+        m_TopShooter.setSetpoint(p_setpoint);
+        m_BottomShooter.setSetpoint(p_setpoint);
+    }
+
+    public void enable(){
+        m_TopShooter.enable();
+        m_BottomShooter.enable();
+    }
+
+    public void disable(){
+        m_TopShooter.disable();
+        m_BottomShooter.disable();
+    }
+
     @Override
     public void periodic(){
-        // if(m_variables.ReadyToShoot()){
-        //     interpolatedRPM = m_shooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget());
-        //     m_TopShooter.setSetpoint(interpolatedRPM);
-        //     m_BottomShooter.setSetpoint(interpolatedRPM);
-        // }
     }
 
     public double getInterpolatedRPM(){

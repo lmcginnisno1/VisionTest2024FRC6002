@@ -130,6 +130,10 @@ public class SUB_Arm extends SubsystemBase{
         m_ShoulderGoal = new TrapezoidProfile.State(Math.toRadians(ShoulderGoal), 0);
     }
 
+    public double getShoulderGoal(){
+        return m_ShoulderGoal.position;
+    }
+
     public void ShoulderInit(){
         m_ShoulderSetpoint = new TrapezoidProfile.State(getShoulderAngleRad(), 0);
         m_ShoulderGoal = m_ShoulderSetpoint;
@@ -159,6 +163,10 @@ public class SUB_Arm extends SubsystemBase{
         m_ElbowGoal = new TrapezoidProfile.State(Math.toRadians(ElbowGoal)  - getShoulderAngleRad(), 0);
     }
 
+    public double getElbowGoal(){
+        return m_ElbowGoal.position;
+    }
+
     public void ElbowInit(){
         m_ElbowSetpoint = new TrapezoidProfile.State(getElbowAngleRad(), 0);
         m_ElbowGoal = m_ElbowSetpoint;
@@ -175,10 +183,10 @@ public class SUB_Arm extends SubsystemBase{
 
         setElbowReference(m_ElbowSetpoint.position);
 
-        if(m_variables.ReadyToShoot()){
-            m_ShoulderGoal = new TrapezoidProfile.State(m_ShoulderInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
-            m_ElbowGoal = new TrapezoidProfile.State(m_ElbowInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
-        }
+        // if(m_variables.ReadyToShoot()){
+        //     m_ShoulderGoal = new TrapezoidProfile.State(m_ShoulderInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
+        //     m_ElbowGoal = new TrapezoidProfile.State(m_ElbowInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
+        // }
 
         telemetry();
     }

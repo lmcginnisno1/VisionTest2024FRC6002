@@ -45,6 +45,10 @@ public class SUB_TopShooter extends PIDSubsystem{
         return m_controller.atSetpoint();
     }
 
+    public void setVoltage(double p_voltage){
+        m_TopShooterMotor.setVoltage(p_voltage);
+    }
+
     public void telemetry(){
         SmartDashboard.putNumber("Top shooter motor velocity", m_TopShooterEncoder.getVelocity());
         SmartDashboard.putNumber("Top Shooter P", m_controller.getP());
