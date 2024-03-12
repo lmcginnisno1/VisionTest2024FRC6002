@@ -3,47 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4,
-        "y": 6.9
+        "x": 2.5276958246224197,
+        "y": 5.564955745296107
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5180339887498953,
-        "y": 6.9
+        "x": 2.290889197163011,
+        "y": 5.782028487133897
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "5NoteBlue2"
     },
     {
       "anchor": {
-        "x": 2.241554483112867,
-        "y": 6.324710341726448
+        "x": 2.6460991383521244,
+        "y": 6.847658310701237
       },
       "prevControl": {
-        "x": 1.7415544831128669,
-        "y": 6.324710341726448
+        "x": 1.9455461987847067,
+        "y": 6.226040913620289
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "preload 3 note line"
+      "linkedName": "5NoteBlue3"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 5.3,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 31.218402764346344,
+    "rotation": 27.428741221677512,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "5NoteBlue",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }
