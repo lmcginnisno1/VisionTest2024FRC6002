@@ -15,13 +15,13 @@ import frc.robot.subsystems.SUB_Drivetrain;
 
 public class CMD_AutoDriveToSource extends Command{
     final SUB_Drivetrain m_drivetrain;
-    final GlobalVariables m_Variables;
+    final GlobalVariables m_variables;
     PathPlannerPath m_path;
     Command m_pathFindingCommand;
     DriverStation.Alliance m_Alliance;
-    public CMD_AutoDriveToSource(SUB_Drivetrain p_drivetrain, GlobalVariables p_Variables){
+    public CMD_AutoDriveToSource(SUB_Drivetrain p_drivetrain, GlobalVariables p_variables){
         m_drivetrain = p_drivetrain;
-        m_Variables = p_Variables;
+        m_variables = p_variables;
     }
 
     @Override
@@ -34,32 +34,32 @@ public class CMD_AutoDriveToSource extends Command{
         //find the closest source slot to us base on X, using blue alliance coordinate system
         if(m_Alliance == DriverStation.Alliance.Blue){
             if(m_robotPose.getX() < 15.5){
-                m_Variables.SetSourceSlot(SourceSlot.LEFT);
+                m_variables.SetSourceSlot(SourceSlot.LEFT);
             }else if(m_robotPose.getX() < 16){
-                m_Variables.SetSourceSlot(SourceSlot.MIDDLE);
+                m_variables.SetSourceSlot(SourceSlot.MIDDLE);
             }else if(m_robotPose.getX() <= 16.5){
-                m_Variables.SetSourceSlot(SourceSlot.RIGHT);
+                m_variables.SetSourceSlot(SourceSlot.RIGHT);
             }else{
                 return;
             }
         }else if (m_Alliance == DriverStation.Alliance.Blue){
            if(m_robotPose.getX() > 2.5){
-                m_Variables.SetSourceSlot(SourceSlot.RIGHT);
+                m_variables.SetSourceSlot(SourceSlot.RIGHT);
             }else if(m_robotPose.getX() > 2){
-                m_Variables.SetSourceSlot(SourceSlot.MIDDLE);
+                m_variables.SetSourceSlot(SourceSlot.MIDDLE);
             }else if(m_robotPose.getX() > 1.1){
-                m_Variables.SetSourceSlot(SourceSlot.LEFT);
+                m_variables.SetSourceSlot(SourceSlot.LEFT);
             }else{
                 return;
             } 
         }
 
         // Load the path we want to pathfind to and follow
-        if(m_Variables.getSelectedSourceSlot() == SourceSlot.LEFT){
+        if(m_variables.getSelectedSourceSlot() == SourceSlot.LEFT){
             m_path = PathPlannerPath.fromPathFile("source slot left");
-        }else if(m_Variables.getSelectedSourceSlot() == SourceSlot.MIDDLE){
+        }else if(m_variables.getSelectedSourceSlot() == SourceSlot.MIDDLE){
             m_path = PathPlannerPath.fromPathFile("source slot middle");
-        }else if(m_Variables.getSelectedSourceSlot() == SourceSlot.RIGHT){
+        }else if(m_variables.getSelectedSourceSlot() == SourceSlot.RIGHT){
             m_path = PathPlannerPath.fromPathFile("source slot right");
         }else{
             return;

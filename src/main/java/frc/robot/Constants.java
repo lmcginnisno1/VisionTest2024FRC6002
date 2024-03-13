@@ -234,10 +234,21 @@ public final class Constants {
         {180, 3000},
         {240, 3500},
         {300, 4000},
-      };
+    };
 
-      public static final LinearInterpolator kShooterInterpolator = new LinearInterpolator(kShooterInterpolatorValues);
-    }
+    public static final LinearInterpolator kShooterInterpolator = new LinearInterpolator(kShooterInterpolatorValues);
+
+    public static final double[][] kShooterChargeTimeInterpolatorValues = {
+      {5, 0.5},
+      {6, 0.6},
+      {7, 0.7},
+      {8, 0.8},
+      {9, 0.9},
+      {10, 1}
+    };
+
+    public static final LinearInterpolator kShooterChargeTimenterpolator = new LinearInterpolator(kShooterChargeTimeInterpolatorValues);
+  }
 
   public static final class ArmConstants{
     public static final int kShoulderMotorMainCANId = 9;

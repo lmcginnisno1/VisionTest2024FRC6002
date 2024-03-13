@@ -15,11 +15,11 @@ public class CMD_ToggleCalibrationMode extends Command{
 
     @Override 
     public void initialize(){
-        if(!m_RobotContainer.m_Variables.getCalibrationMode()){
-            m_RobotContainer.m_Variables.setCalibrationMode(true);
-            m_RobotContainer.m_RobotDrive.resetPose(new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0))));
+        if(!m_RobotContainer.m_variables.getCalibrationMode()){
+            m_RobotContainer.m_variables.setCalibrationMode(true);
+            m_RobotContainer.m_robotDrive.resetPose(new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0))));
         }else{
-            m_RobotContainer.m_Variables.setCalibrationMode(false);
+            m_RobotContainer.m_variables.setCalibrationMode(false);
         }
     }
 }

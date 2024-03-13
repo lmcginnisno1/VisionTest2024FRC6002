@@ -12,7 +12,7 @@ public class CMD_Drive extends Command{
 
   private final SUB_Drivetrain m_drivetrain;
   private final CommandXboxController controller;
-  private final GlobalVariables m_Variables;
+  private final GlobalVariables m_variables;
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   // private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(0.5);
   // private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(0.5);
@@ -23,11 +23,11 @@ public class CMD_Drive extends Command{
   double x = 0;           //variable for side to side movement
   double turn = 0;        //variable for turning movement
 
-  public CMD_Drive(SUB_Drivetrain m_drivetrain, CommandXboxController m_driverControllerTrigger, GlobalVariables m_Variables) {
+  public CMD_Drive(SUB_Drivetrain m_drivetrain, CommandXboxController m_driverControllerTrigger, GlobalVariables m_variables) {
     this.m_drivetrain = m_drivetrain;
     addRequirements(m_drivetrain);
 
-    this.m_Variables = m_Variables;
+    this.m_variables = m_variables;
     this.controller = m_driverControllerTrigger;
   }
 
@@ -68,7 +68,7 @@ public class CMD_Drive extends Command{
     /* Override driver rotation if AutoAlign is enabled. */
     if (this.controller.leftTrigger().getAsBoolean()) {
         double heading_error =
-            m_Variables.getRobotPose().getRotation().getDegrees() - m_Variables.getAngleToTarget();
+            m_variables.getRobotPose().getRotation().getDegrees() - m_variables.getAngleToTarget();
 
         if (Math.abs(heading_error) > 5) {
           rot = heading_error * 0.002;

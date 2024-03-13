@@ -33,8 +33,9 @@ public class CMD_ArmAim extends Command {
     }
   }
 
-  public void noWait(){
+  public Command noWait(){
     noWait = true;
+    return this;
   }
 
   @Override
