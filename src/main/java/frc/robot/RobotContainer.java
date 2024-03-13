@@ -61,6 +61,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Fire", new CMD_Shoot(m_intake, m_shooter, m_variables));
     NamedCommands.registerCommand("Home Arm", new CMD_ArmHome(m_arm));
     NamedCommands.registerCommand("Home Arm noWait", new CMD_ArmHome(m_arm).noWait());
+    NamedCommands.registerCommand("Intake On", new CMD_IntakeForward(m_intake));
+    NamedCommands.registerCommand("intake off", new CMD_IntakeOff(m_intake));
+    NamedCommands.registerCommand("intake reverse", new CMD_IntakeReverse(m_intake));
 
     m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_DriverController, m_variables));
     autoChooser = AutoBuilder.buildAutoChooser();

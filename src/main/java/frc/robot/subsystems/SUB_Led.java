@@ -11,11 +11,11 @@ import frc.utils.led.*;
 import frc.utils.led.pattern.LEDPattern;
 
 public class SUB_Led extends SubsystemBase {
-  final PWMLEDController m_LedController;
+  final PWMLEDController m_ledController;
   public SUB_Led() {
-    m_LedController = new PWMLEDController(LedConstants.kLedStripPWMPort);
+    m_ledController = new PWMLEDController(LedConstants.kLedStripPWMPort);
     try{
-      m_LedController.addStrip(new LEDStrip(LedConstants.kLedStripLength, LedConstants.kLedStripOffest));
+      m_ledController.addStrip(new LEDStrip(LedConstants.kLedStripLength, LedConstants.kLedStripOffest));
     }catch(DuplicateLEDAssignmentException e){
       DriverStation.reportError("duplicate LED asignment", false);
       e.printStackTrace();
@@ -23,20 +23,20 @@ public class SUB_Led extends SubsystemBase {
   }
 
   public void setPattern(LEDPattern pattern){
-    m_LedController.getStrip(LedConstants.kLedStripControllerIndex).setPattern(pattern);
+    m_ledController.getStrip(LedConstants.kLedStripControllerIndex).setPattern(pattern);
   }
 
   public void setPatternDuration(double duration){
-    m_LedController.getStrip(LedConstants.kLedStripControllerIndex).setPatternDuration(duration);
+    m_ledController.getStrip(LedConstants.kLedStripControllerIndex).setPatternDuration(duration);
   }
 
   public void setLedColors(Color PrimaryColor, Color SecondaryColor){
-    m_LedController.getStrip(LedConstants.kLedStripControllerIndex).setPrimaryColor(PrimaryColor);
-    m_LedController.getStrip(LedConstants.kLedStripControllerIndex).setSecondaryColor(SecondaryColor);
+    m_ledController.getStrip(LedConstants.kLedStripControllerIndex).setPrimaryColor(PrimaryColor);
+    m_ledController.getStrip(LedConstants.kLedStripControllerIndex).setSecondaryColor(SecondaryColor);
   }
 
   @Override
   public void periodic(){
-    m_LedController.updateStrips();
+    m_ledController.updateStrips();
   }
 }

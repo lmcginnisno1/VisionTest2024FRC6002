@@ -20,14 +20,6 @@ public class GlobalVariables extends SubsystemBase{
 
     private SourceSlot m_SourceSlotSelected = SourceSlot.MIDDLE;
 
-
-    public enum IntakeMode{
-        SOURCE,
-        GROUND
-    }
-
-    private IntakeMode m_IntakeMode = IntakeMode.GROUND;
-
     @Override
     public void periodic(){
         
@@ -63,14 +55,6 @@ public class GlobalVariables extends SubsystemBase{
 
     public SourceSlot getSelectedSourceSlot(){
         return m_SourceSlotSelected;
-    }
-
-    public void setIntakeMode(IntakeMode p_IntakeMode){
-        m_IntakeMode = p_IntakeMode;
-    }
-
-    public IntakeMode getIntakeMode(){
-        return m_IntakeMode;
     }
 
     public void setReadyToShoot(boolean p_readyToShoot){

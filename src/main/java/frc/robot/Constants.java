@@ -247,7 +247,7 @@ public final class Constants {
       {10, 1}
     };
 
-    public static final LinearInterpolator kShooterChargeTimenterpolator = new LinearInterpolator(kShooterChargeTimeInterpolatorValues);
+    public static final LinearInterpolator kShooterChargeTimeInterpolator = new LinearInterpolator(kShooterChargeTimeInterpolatorValues);
   }
 
   public static final class ArmConstants{

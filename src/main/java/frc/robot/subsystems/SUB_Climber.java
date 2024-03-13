@@ -23,7 +23,7 @@ public class SUB_Climber extends SubsystemBase{
     TrapezoidProfile.State m_WinchGoal;
     TrapezoidProfile.State m_WinchSetpoint;
 
-    PWM m_ClimberServo = new PWM(ClimberConstants.kClimberServoPWMPort);
+    PWM m_climberServo = new PWM(ClimberConstants.kClimberServoPWMPort);
 
     public SUB_Climber(){
         m_WinchMotor = new CANSparkMax(ClimberConstants.kClimberMotorCANId, MotorType.kBrushless);
@@ -69,10 +69,10 @@ public class SUB_Climber extends SubsystemBase{
     }
 
     public void setClimbServoUnhooked(){
-        m_ClimberServo.setPosition(ClimberConstants.kClimberServoUnhooked);
+        m_climberServo.setPosition(ClimberConstants.kClimberServoUnhooked);
     }
 
     public void setClimbServoHooked(){
-        m_ClimberServo.setPosition(ClimberConstants.kClimberServoHooked);
+        m_climberServo.setPosition(ClimberConstants.kClimberServoHooked);
     }
 }

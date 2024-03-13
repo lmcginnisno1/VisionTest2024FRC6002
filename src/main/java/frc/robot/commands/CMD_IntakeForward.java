@@ -5,19 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SUB_Arm;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.SUB_Intake;
 
-public class CMD_ArmSetElbowGoal extends Command {
-  final SUB_Arm m_arm;
-  double m_goal;
-  public CMD_ArmSetElbowGoal(SUB_Arm p_Arm, double p_goal) {
-    m_arm = p_Arm;
-    m_goal = p_goal;
+public class CMD_IntakeForward extends Command {
+  final SUB_Intake m_intake;
+  public CMD_IntakeForward(SUB_Intake p_intake){
+    m_intake = p_intake;
   }
 
   @Override
   public void initialize() {
-    m_arm.setElbowGoal(m_goal);
+    m_intake.startIntaking();
+    m_intake.setGroundIntakePower(IntakeConstants.kIntakeForward);
   }
 
   @Override

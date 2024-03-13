@@ -13,10 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.GlobalVariables;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.LedConstants;
-import frc.robot.GlobalVariables.IntakeMode;
 
 public class SUB_Intake extends SubsystemBase{
-    final SUB_Led m_Led;
+    final SUB_Led m_led;
     final GlobalVariables m_variables;
     final CANSparkMax m_groundIntakeMotor;
     final CANSparkMax m_indexerMotor;
@@ -26,7 +25,7 @@ public class SUB_Intake extends SubsystemBase{
     boolean intaking = false;
 
     public SUB_Intake(SUB_Led p_Led, GlobalVariables p_variables){
-        m_Led = p_Led;
+        m_led = p_Led;
         m_variables = p_variables;
         m_groundIntakeMotor = new CANSparkMax(IntakeConstants.kGroundIntakeMotorCANId, MotorType.kBrushless);
         m_groundIntakeMotor.setIdleMode(IdleMode.kBrake);
@@ -85,19 +84,20 @@ public class SUB_Intake extends SubsystemBase{
     @Override
     public void periodic(){
         SmartDashboard.putNumber("ground intake current", m_groundIntakeMotor.getOutputCurrent());
-        if(m_groundIntakeMotor.getAppliedOutput() > 0 && getIntakeSensor() && intaking){
+        if(intaking && m_groundIntakeMotor.getOutputCurrent() > 20){
+            m_groundIntakeMotor.set(IntakeConstants.kIndexerForward / 2);
+            m_indexerMotor.set(IntakeConstants.kIntakeForward / 2);
+        }
+        if(intaking && getIntakeSensor()){
             stopGroundIntake();
             stopIndexer();
-            m_Led.setPattern(LedConstants.kSolidColorPattern);
-            m_Led.setLedColors(LedConstants.kBrightGreen, LedConstants.kBrightGreen);
+            m_led.setPattern(LedConstants.kSolidColorPattern);
+            m_led.setLedColors(LedConstants.kBrightGreen, LedConstants.kBrightGreen);
             intaking = false;
         }
-        if(intaking && m_variables.getIntakeMode() == IntakeMode.GROUND){
-            m_Led.setPattern(LedConstants.kChasePattern);
-            m_Led.setLedColors(LedConstants.kBrightOrange, LedConstants.kBrightOrange);
-        }else if(intaking && m_variables.getIntakeMode() == IntakeMode.SOURCE){
-            m_Led.setPattern(LedConstants.kWavePattern);
-            m_Led.setLedColors(LedConstants.kBrightOrange, LedConstants.kMaroon);
+        if(intaking){
+            m_led.setPattern(LedConstants.kChasePattern);
+            m_led.setLedColors(LedConstants.kBrightOrange, LedConstants.kBrightOrange);
         }
     }
 }

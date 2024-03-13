@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ShooterConstants;
 
 public class SUB_TopShooter extends PIDSubsystem{
-    final CANSparkMax m_TopShooterMotor;
-    final RelativeEncoder m_TopShooterEncoder;
+    final CANSparkMax m_topShooterMotor;
+    final RelativeEncoder m_topShooterEncoder;
 
-    private final SimpleMotorFeedforward m_TopShooterFeedforward =
+    private final SimpleMotorFeedforward m_topShooterFeedforward =
       new SimpleMotorFeedforward(
           ShooterConstants.kSTop, ShooterConstants.kVTop);
 
@@ -23,22 +23,22 @@ public class SUB_TopShooter extends PIDSubsystem{
         super(new PIDController(ShooterConstants.kTopShooterP, ShooterConstants.kTopShooterI, ShooterConstants.kTopShooterD));
         getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
         setSetpoint(0);
-        m_TopShooterMotor = new CANSparkMax(ShooterConstants.kTopShooterMotorCANId, MotorType.kBrushless);
-        m_TopShooterEncoder = m_TopShooterMotor.getEncoder();
-        m_TopShooterMotor.setIdleMode(IdleMode.kCoast);
-        m_TopShooterMotor.setSmartCurrentLimit(ShooterConstants.kShooterCurrentLimit);
+        m_topShooterMotor = new CANSparkMax(ShooterConstants.kTopShooterMotorCANId, MotorType.kBrushless);
+        m_topShooterEncoder = m_topShooterMotor.getEncoder();
+        m_topShooterMotor.setIdleMode(IdleMode.kCoast);
+        m_topShooterMotor.setSmartCurrentLimit(ShooterConstants.kShooterCurrentLimit);
 
-        m_TopShooterMotor.burnFlash();
+        m_topShooterMotor.burnFlash();
     }
 
     @Override
     protected void useOutput(double output, double setpoint) {
-        m_TopShooterMotor.setVoltage(output + m_TopShooterFeedforward.calculate(setpoint));
+        m_topShooterMotor.setVoltage(output + m_topShooterFeedforward.calculate(setpoint));
     }
 
     @Override
     protected double getMeasurement() {
-        return (double)m_TopShooterEncoder.getVelocity();
+        return (double)m_topShooterEncoder.getVelocity();
     }
 
     public boolean atSetpoint() {
@@ -46,11 +46,11 @@ public class SUB_TopShooter extends PIDSubsystem{
     }
 
     public void setVoltage(double p_voltage){
-        m_TopShooterMotor.setVoltage(p_voltage);
+        m_topShooterMotor.setVoltage(p_voltage);
     }
 
     public void telemetry(){
-        SmartDashboard.putNumber("Top shooter motor velocity", m_TopShooterEncoder.getVelocity());
+        SmartDashboard.putNumber("Top shooter motor velocity", m_topShooterEncoder.getVelocity());
         SmartDashboard.putNumber("Top Shooter P", m_controller.getP());
         SmartDashboard.putNumber("Top Shooter I", m_controller.getI());
         SmartDashboard.putNumber("Top Shooter D", m_controller.getD());

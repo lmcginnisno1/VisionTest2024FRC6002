@@ -45,7 +45,7 @@ public class CMD_Shoot extends Command{
             }
         }else{
             m_ChargeTimer.start();
-            if(m_ChargeTimer.get() > ShooterConstants.kShooterChargeTimenterpolator.getInterpolatedValue(m_variables.getDistanceToTarget())){
+            if(m_ChargeTimer.get() > ShooterConstants.kShooterChargeTimeInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget())){
                 m_intake.setIndexerPower(IntakeConstants.kIndexerForward);
                 m_powerOffTimer.start();
             }
