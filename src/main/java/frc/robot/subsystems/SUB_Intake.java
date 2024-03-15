@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -74,11 +73,6 @@ public class SUB_Intake extends SubsystemBase{
 
     public double getGroundIntakeCurrent(){
         return m_groundIntakeMotor.getOutputCurrent();
-    }
-
-    public void prepShot(){
-        m_indexerEncoder.setPosition(0);
-        m_indexerController.setReference(-10, ControlType.kPosition);
     }
 
     @Override
