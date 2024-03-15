@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,6 +16,27 @@ public class GlobalVariables extends SubsystemBase{
         LEFT,
         MIDDLE,
         RIGHT
+    }
+
+    public enum RobotState{
+        Home,
+        ReadyToIntake,
+        Stow,
+        ReadyToShoot,
+        TransitioningToHome,
+        TransitioningToShoot,
+        Climbing,
+        Hanging
+    }
+
+    private RobotState m_robotState = RobotState.Home;
+
+    public void setRobotState(RobotState p_robotState){
+        m_robotState = p_robotState;
+    }
+
+    public boolean isRobotState(RobotState p_RobotState){
+        return m_robotState == p_RobotState;
     }
 
     private SourceSlot m_SourceSlotSelected = SourceSlot.MIDDLE;

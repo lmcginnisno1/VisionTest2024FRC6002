@@ -11,14 +11,14 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.*;
-import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.*;
+import frc.robot.subsystems.GlobalVariables.RobotState;
+import frc.robot.commands.*;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -34,7 +34,7 @@ public class RobotContainer {
   public final SUB_TopShooter m_topShooter = new SUB_TopShooter();
   public final SUB_BottomShooter m_bottomShooter = new SUB_BottomShooter();
   public final SUB_Vision m_vision = new SUB_Vision();
-  public final SUB_Intake m_intake = new SUB_Intake(m_led, m_variables);
+  public final SUB_Intake m_intake = new SUB_Intake(m_variables);
   public final SUB_Arm m_arm = new SUB_Arm(m_variables);
   public final SUB_Drivetrain m_robotDrive = new SUB_Drivetrain(m_variables, m_vision);
   public final SUB_Shooter m_shooter = new SUB_Shooter(m_topShooter, m_bottomShooter, m_led, m_variables);
@@ -51,13 +51,10 @@ public class RobotContainer {
   public RobotContainer(){
     // Configure the button bindings
     NamedCommands.registerCommand("Ready", new CMD_RevShooter(m_shooter, m_variables));
-    NamedCommands.registerCommand("Aim drive", new CMD_AutoAim(m_robotDrive, m_variables));
+    NamedCommands.registerCommand("Aim drive", new CMD_DriveAim(m_robotDrive, m_variables));
     NamedCommands.registerCommand("Aim arm", new CMD_ArmAim(m_arm, m_variables));
     NamedCommands.registerCommand("Aim arm noWait", new CMD_ArmAim(m_arm, m_variables).noWait());
-    NamedCommands.registerCommand("Auto Aim", new SequentialCommandGroup(
-      new CMD_ArmAim(m_arm, m_variables).noWait(),
-      new CMD_AutoAim(m_robotDrive, m_variables)
-    ));
+    NamedCommands.registerCommand("Auto Aim", new CMD_AutoAim(m_robotDrive, m_arm, m_variables));
     NamedCommands.registerCommand("Fire", new CMD_Shoot(m_intake, m_shooter, m_variables));
     NamedCommands.registerCommand("Home Arm", new CMD_ArmHome(m_arm));
     NamedCommands.registerCommand("Home Arm noWait", new CMD_ArmHome(m_arm).noWait());
@@ -81,11 +78,19 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_DriverController.a().onTrue(new ConditionalCommand(new CMD_PrepShot(m_intake, m_led, m_variables),
-      new CMD_Shoot(m_intake, m_shooter, m_variables), m_variables::ReadyToShoot));
-    m_DriverController.b().onTrue(new CMD_GroundIntakeForward(m_intake));
+    //main cyle of commands
+    m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
+
+    //when switching to calibration mode, reset odometry to 0,0,0 to calibrate wheel size
     m_DriverController.back().onTrue(new CMD_ToggleCalibrationMode(this));
+
+    //while holding left trigger, chase the closest note in FOV, when released, cancel the command
     m_DriverController.leftTrigger().whileTrue(new CMD_ChaseDownNote(m_robotDrive, m_intake));
+
+    //while holding right trigger, reverse intake, on release go back to forwards if intaking or off if not
+    m_DriverController.rightTrigger().whileTrue(new CMD_IntakeReverse(m_intake)).onFalse(
+      new ConditionalCommand(new CMD_IntakeForward(m_intake), new CMD_IntakeOff(m_intake),
+       ()-> m_variables.isRobotState(RobotState.ReadyToIntake)));
   }
 
   /**

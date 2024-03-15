@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.62,
-  "robotLength": 0.669925,
+  "robotWidth": 0.76,
+  "robotLength": 0.81,
   "holonomicMode": true,
   "pathFolders": [
     "5NoteBlue"

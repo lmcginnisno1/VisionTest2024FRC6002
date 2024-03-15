@@ -4,44 +4,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.GlobalVariables;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.GlobalVariables;
+import frc.robot.subsystems.SUB_Arm;
 import frc.robot.subsystems.SUB_Drivetrain;
 
-public class CMD_AutoAim extends Command {
-  final SUB_Drivetrain m_drivetrain;
-  final GlobalVariables m_variables;
-  double angleToTarget;
-  boolean isFinished;
-  public CMD_AutoAim(SUB_Drivetrain p_drivetrain, GlobalVariables p_variables) {
-    m_drivetrain = p_drivetrain;
-    m_variables = p_variables;
-  }
+public class CMD_AutoAim extends SequentialCommandGroup {
+  public CMD_AutoAim(SUB_Drivetrain p_drive, SUB_Arm p_arm, GlobalVariables p_variables) {
 
-  @Override
-  public void initialize() {
-    isFinished = false;
-  }
-
-  @Override
-  public void execute() {
-    double rot = 0;
-    double heading_error =  m_variables.getRobotPose().getRotation().getDegrees() - m_variables.getAngleToTarget();
-
-    if (Math.abs(heading_error) >= 1) {
-      rot = heading_error * 0.002;
-    }else{
-      isFinished = true;
-    }
-
-    m_drivetrain.drive(0, rot, 0, false, true);
-  }
-
-  @Override
-  public void end(boolean interrupted) {}
-
-  @Override
-  public boolean isFinished() {
-    return isFinished;
+    addCommands(
+      new CMD_ArmAim(p_arm, p_variables).noWait(),
+      new CMD_DriveAim(p_drive, p_variables)
+    );
   }
 }

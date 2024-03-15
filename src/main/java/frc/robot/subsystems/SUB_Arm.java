@@ -13,7 +13,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.GlobalVariables;
 import frc.robot.Constants.ArmConstants;
 import frc.utils.LinearInterpolator;
 
@@ -182,11 +181,6 @@ public class SUB_Arm extends SubsystemBase{
         m_ElbowSetpoint = m_ElbowProfile.calculate(0.02, m_ElbowSetpoint, m_ElbowGoal);
 
         setElbowReference(m_ElbowSetpoint.position);
-
-        // if(m_variables.ReadyToShoot()){
-        //     m_ShoulderGoal = new TrapezoidProfile.State(m_ShoulderInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
-        //     m_ElbowGoal = new TrapezoidProfile.State(m_ElbowInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget()), 0);
-        // }
 
         telemetry();
     }
