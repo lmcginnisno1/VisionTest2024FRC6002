@@ -130,7 +130,7 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     public double getShoulderGoal(){
-        return m_ShoulderGoal.position;
+        return Math.toDegrees(m_ShoulderGoal.position);
     }
 
     public void ShoulderInit(){
@@ -163,7 +163,7 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     public double getElbowGoal(){
-        return m_ElbowGoal.position;
+        return Math.toDegrees(m_ElbowGoal.position);
     }
 
     public void ElbowInit(){
