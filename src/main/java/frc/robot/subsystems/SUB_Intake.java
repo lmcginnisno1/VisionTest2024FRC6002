@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -13,7 +14,9 @@ import frc.robot.Constants.IntakeConstants;
 
 public class SUB_Intake extends SubsystemBase{
     final GlobalVariables m_variables;
-    final CANSparkMax m_groundIntakeMotor;
+    final CANSparkMax m_mainGroundIntakeMotor;
+    final CANSparkMax m_followerGroundIntakeMotor;
+    final SparkPIDController m_GroundIntakePIDcontroller;
     final CANSparkMax m_indexerMotor;
     final DigitalInput m_indexerSensor = new DigitalInput(IntakeConstants.kIndexerSensorDigitalPort);
     final RelativeEncoder m_indexerEncoder;
@@ -22,14 +25,29 @@ public class SUB_Intake extends SubsystemBase{
 
     public SUB_Intake(GlobalVariables p_variables){
         m_variables = p_variables;
-        m_groundIntakeMotor = new CANSparkMax(IntakeConstants.kGroundIntakeMotorCANId, MotorType.kBrushless);
-        m_groundIntakeMotor.setIdleMode(IdleMode.kBrake);
-        m_groundIntakeMotor.setSmartCurrentLimit(IntakeConstants.kGroundIntakeCurrentLimit);
-        m_groundIntakeMotor.burnFlash();
+        m_mainGroundIntakeMotor = new CANSparkMax(IntakeConstants.kMainGroundIntakeMotorCANId, MotorType.kBrushless);
+        m_mainGroundIntakeMotor.setInverted(true);
+        m_GroundIntakePIDcontroller = m_mainGroundIntakeMotor.getPIDController();
+        m_GroundIntakePIDcontroller.setP(IntakeConstants.kGroundIntakeP);
+        m_GroundIntakePIDcontroller.setI(IntakeConstants.kGroundIntakeI);
+        m_GroundIntakePIDcontroller.setD(IntakeConstants.kGroundIntakeD);
+        m_GroundIntakePIDcontroller.setFF(IntakeConstants.kGroundIntakeFF);
+        m_mainGroundIntakeMotor.setIdleMode(IdleMode.kCoast);
+        m_mainGroundIntakeMotor.setSmartCurrentLimit(IntakeConstants.kGroundIntakeCurrentLimit);
+        m_mainGroundIntakeMotor.burnFlash();
+
+        m_followerGroundIntakeMotor = new CANSparkMax(IntakeConstants.kFollowerGroundIntakeMotorCANId, MotorType.kBrushless);
+        m_followerGroundIntakeMotor.setIdleMode(IdleMode.kCoast);
+        m_followerGroundIntakeMotor.setSmartCurrentLimit(IntakeConstants.kGroundIntakeCurrentLimit);
+        m_followerGroundIntakeMotor.burnFlash();
+        m_followerGroundIntakeMotor.follow(m_mainGroundIntakeMotor, false);
 
         m_indexerMotor = new CANSparkMax(IntakeConstants.kIndexerMotorCANId, MotorType.kBrushless);
         m_indexerMotor.setIdleMode(IdleMode.kBrake);
         m_indexerMotor.setSmartCurrentLimit(IntakeConstants.kIndexerCurrentLimit);
+        m_indexerMotor.setInverted(true);
+        m_indexerMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).enableLimitSwitch(false);
+        m_indexerMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).enableLimitSwitch(false);
         m_indexerMotor.burnFlash();
 
         m_indexerEncoder = m_indexerMotor.getEncoder();
@@ -44,19 +62,19 @@ public class SUB_Intake extends SubsystemBase{
             intaking = true;
             setIndexerPower(p_power);
         }
-        m_groundIntakeMotor.set(p_power);
+        m_mainGroundIntakeMotor.set(p_power);
     }
 
     public void stopGroundIntake(){
-        m_groundIntakeMotor.set(IntakeConstants.kIntakeOff);
+        m_mainGroundIntakeMotor.set(IntakeConstants.kIntakeOff);
     }
 
     public void setIndexerPower(double p_power){
-        m_groundIntakeMotor.set(p_power);
+        m_mainGroundIntakeMotor.set(p_power);
     }
 
     public void stopIndexer(){
-        m_groundIntakeMotor.set(IntakeConstants.kIntakeOff);
+        m_mainGroundIntakeMotor.set(IntakeConstants.kIntakeOff);
     }
 
     public boolean getIntakeSensor(){
@@ -72,11 +90,11 @@ public class SUB_Intake extends SubsystemBase{
     }
 
     public double getGroundIntakeCurrent(){
-        return m_groundIntakeMotor.getOutputCurrent();
+        return m_mainGroundIntakeMotor.getOutputCurrent();
     }
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("ground intake current", m_groundIntakeMotor.getOutputCurrent());
+        SmartDashboard.putNumber("ground intake current", m_mainGroundIntakeMotor.getOutputCurrent());
     }
 }

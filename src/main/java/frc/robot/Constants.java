@@ -18,7 +18,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.utils.LinearInterpolator;
 import frc.utils.led.Color;
@@ -48,7 +47,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8;
+    public static final double kMaxSpeedMetersPerSecond = 5.6;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -64,9 +63,9 @@ public final class Constants {
     );
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26.5);
+    public static final double kTrackWidth = Units.inchesToMeters(18.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26.5);
+    public static final double kWheelBase = Units.inchesToMeters(25.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -107,7 +106,7 @@ public final class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 14;
+    public static final int kDrivingMotorPinionTeeth = 15;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
@@ -118,14 +117,17 @@ public final class Constants {
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-    public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
+    public static final double kDrivingMotorReduction = (45.0 * 20) / (kDrivingMotorPinionTeeth * 15);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
 
-    public static final double kDrivingEncoderPositionFactor = (kWheelDiameterMeters * Math.PI)
-        / kDrivingMotorReduction; // meters
-    public static final double kDrivingEncoderVelocityFactor = ((kWheelDiameterMeters * Math.PI)
-        / kDrivingMotorReduction) / 60.0; // meters per second
+    public static final double kXFactor = .9882;  // if actual is smaller than odo go down  
+
+
+    public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
+        / kDrivingMotorReduction) * kXFactor; // meters
+    public static final double kDrivingEncoderVelocityFactor = (((kWheelDiameterMeters * Math.PI)
+        / kDrivingMotorReduction) / 60.0) * kXFactor; // meters per second
 
     public static final double kTurningEncoderPositionFactor = (2 * Math.PI); // radians
     public static final double kTurningEncoderVelocityFactor = (2 * Math.PI) / 60.0; // radians per second
@@ -133,15 +135,19 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04;//0.04
+    public static final double kDrivingP = 0.17;//0.04
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
-    public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
+    public static final double kDrivingFF = 0.21; //1 / kDriveWheelFreeSpeedRps
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
+    public static final double kDrivingA = .4;
+    public static final double kDrivingS = 0.17;
+    public static final double kDrivingV = 2.28;
+
     public static final double kTurningP = 1.5;
-    public static final double kTurningI = 0;
+    public static final double kTurningI = 0.0;
     public static final double kTurningD = 0;
     public static final double kTurningFF = 0;
     public static final double kTurningMinOutput = -1;
@@ -160,30 +166,21 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
   }
 
-  public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 2;
-
-    // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
-  }
-
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
     public static final int kEncoderPPR = 42;
   }
 
   public static final class IntakeConstants {
-    public static final int kGroundIntakeMotorCANId = 11;
+    public static final int kMainGroundIntakeMotorCANId = 11;
+    public static final int kFollowerGroundIntakeMotorCANId = 12;
     public static final int kIndexerMotorCANId = 13;
     public static final int kIndexerSensorDigitalPort = 9;
+
+    public static final double kGroundIntakeP = 0.00005;
+    public static final double kGroundIntakeI = 0;
+    public static final double kGroundIntakeD = 0.00001;
+    public static final double kGroundIntakeFF = 0.00022;
 
     public static final double kIntakeForward = 0.25;
     public static final double kIntakeOff = 0.0;
@@ -193,12 +190,12 @@ public final class Constants {
     public static final double kIndexerOff = 0.0;
     public static final double kIndexerReverse = -0.25;
 
-    public static final int kIndexerCurrentLimit = 10;
-    public static final int kGroundIntakeCurrentLimit = 10;
+    public static final int kIndexerCurrentLimit = 40;
+    public static final int kGroundIntakeCurrentLimit = 40;
   }
 
   public static final class ShooterConstants{
-    public static final int kShooterCurrentLimit = 30;
+    public static final int kShooterCurrentLimit = 40;
 
     public static final int kBottomShooterMotorFollowerCANId = 21;
     public static final int kBottomShooterMotorMainCANId = 22;
@@ -228,12 +225,12 @@ public final class Constants {
     public static final double kBottomShooterVelocityFF = 10.0;
 
     public static final double[][] kShooterInterpolatorValues = {
-        {36, 2050}, 
-        {84, 2250}, 
-        {120, 2400}, 
-        {180, 3000},
-        {240, 3500},
-        {300, 4000},
+      {36, 2050}, 
+      {84, 2250}, 
+      {120, 2400}, 
+      {180, 2600},
+      {240, 3000},
+      {300, 3250},
     };
 
     public static final LinearInterpolator kShooterInterpolator = new LinearInterpolator(kShooterInterpolatorValues);
@@ -255,8 +252,8 @@ public final class Constants {
     public static final int kShoulderFollowerCANId = 10;
     public static final int kElbowMotorCANId = 14;
 
-    public static final int kShoulderCurrentLimit = 40;
-    public static final int kElbowCurrentLimit = 40;
+    public static final int kShoulderCurrentLimit = 50;
+    public static final int kElbowCurrentLimit = 50;
 
     public static final double kShoulderP = 2.1;
     public static final double kShoulderI = 0;
@@ -272,7 +269,7 @@ public final class Constants {
     public static final double kShoulderPositionConversionFactor = Math.PI * 2; // radians
     public static final double kShoulderVelocityConversionFactor = kShoulderPositionConversionFactor / 60; // radians per second
 
-    public static final double kElbowP = 1.55;
+    public static final double kElbowP = 0.85;
     public static final double kElbowI = 0;
     public static final double kElbowD = 0.0;
     public static final double kElbowFF = 0.0;
