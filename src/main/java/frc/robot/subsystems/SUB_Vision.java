@@ -91,12 +91,13 @@ public class SUB_Vision extends SubsystemBase{
             numTags++;
             avgDist +=
                     tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
-            avgAngle +=
-                    tagPose.get().toPose2d().getTranslation().getAngle().getDegrees();
+        }
+        for(int i = 0; i < targets.size(); i++){
+            avgAngle += targets.get(i).getYaw();
         }
         if (numTags == 0) return estStdDevs;
         avgDist /= numTags;
-        avgAngle /= numTags;
+        avgAngle /= targets.size();
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = VisionConstants.VisionMultiTagStdDevs;
         // Increase std devs based on (average) distance
