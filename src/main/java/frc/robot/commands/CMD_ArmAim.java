@@ -5,9 +5,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.GlobalVariables;
 import frc.robot.subsystems.SUB_Arm;
+import frc.robot.subsystems.GlobalVariables.ScoringMode;
 
 public class CMD_ArmAim extends Command {
   final GlobalVariables m_variables;
@@ -23,13 +25,19 @@ public class CMD_ArmAim extends Command {
   public void initialize() {
     isFinished = false;
     noWait = false;
-    //close shot
-    if(m_variables.getDistanceToTarget() <= 5){
-      m_arm.setShoulderGoal(ArmConstants.kShoulderHome);
-      m_arm.setElbowGoal(ArmConstants.kElbowHome);
-    }else{
-      m_arm.setShoulderGoal(ArmConstants.kShoulderInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget() * 12));//convert to inches
-      m_arm.setElbowGoal(ArmConstants.kElbowInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget() * 12));//cpnvert to inches
+    //if in AMP scoring mode
+    if((m_variables.isScoringMode(ScoringMode.AMP))){
+      m_arm.setShoulderGoal(Constants.ArmConstants.kShoulderAmp);
+      m_arm.setElbowGoal(Constants.ArmConstants.kElbowAmp);
+    }else /* if in SPEAKER scoring mode*/{
+      //close shot
+      if(m_variables.getDistanceToTarget() <= 5){
+        m_arm.setShoulderGoal(ArmConstants.kShoulderHome);
+        m_arm.setElbowGoal(ArmConstants.kElbowHome);
+      }else{
+        m_arm.setShoulderGoal(ArmConstants.kShoulderInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget() * 12));//convert to inches
+        m_arm.setElbowGoal(ArmConstants.kElbowInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget() * 12));//convert to inches
+      }
     }
   }
 

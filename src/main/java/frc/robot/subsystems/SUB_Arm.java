@@ -144,7 +144,7 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     public double getElbowAngleRad(){
-        return MathUtil.angleModulus(m_ElbowEncoder.getPosition());
+        return MathUtil.angleModulus(m_ElbowEncoder.getPosition() - m_ShoulderEncoder.getPosition());
     }
 
     private void setElbowReference(double p_reference){

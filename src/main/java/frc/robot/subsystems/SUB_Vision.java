@@ -27,6 +27,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -84,20 +85,16 @@ public class SUB_Vision extends SubsystemBase{
         var targets = getLatestResult().getTargets();
         int numTags = 0;
         double avgDist = 0;
-        double avgAngle = 0;
         for (var tgt : targets) {
             var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue;
             numTags++;
+            if(filterTag(numTags)) continue;
             avgDist +=
                     tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
         }
-        for(int i = 0; i < targets.size(); i++){
-            avgAngle += targets.get(i).getYaw();
-        }
-        if (numTags == 0) return estStdDevs;
+        if (numTags == 0) return VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         avgDist /= numTags;
-        avgAngle /= targets.size();
         // Decrease std devs if multiple targets are visible
         if (numTags > 1) estStdDevs = VisionConstants.VisionMultiTagStdDevs;
         // Increase std devs based on (average) distance
@@ -105,12 +102,11 @@ public class SUB_Vision extends SubsystemBase{
             estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
-        //if at a bad angle to tags, disregard the data
-        if(avgAngle > 45){
-            estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        }
-
         return estStdDevs;
+    }
+
+    public boolean filterTag(int tagIndex){
+        return(Math.abs(new Rotation2d(180).plus(getLatestResult().getTargets().get(tagIndex).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees())) > 45;
     }
 
     @Override

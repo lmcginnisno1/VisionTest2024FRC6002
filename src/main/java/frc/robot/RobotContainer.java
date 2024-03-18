@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.GlobalVariables.RobotState;
+import frc.robot.subsystems.GlobalVariables.ScoringMode;
 import frc.robot.commands.*;
 
 /*
@@ -91,6 +93,11 @@ public class RobotContainer {
     m_DriverController.rightTrigger().whileTrue(new CMD_IntakeReverse(m_intake)).onFalse(
       new ConditionalCommand(new CMD_IntakeForward(m_intake), new CMD_IntakeOff(m_intake),
        ()-> m_variables.isRobotState(RobotState.ReadyToIntake)));
+
+    m_OperatorController.rightBumper().onTrue(new ConditionalCommand(
+      new InstantCommand(()-> m_variables.setScoringMode(ScoringMode.AMP)),
+      new InstantCommand(()-> m_variables.setScoringMode(ScoringMode.SPEAKER)),
+      ()-> m_variables.isScoringMode(ScoringMode.SPEAKER)));
   }
 
   /**

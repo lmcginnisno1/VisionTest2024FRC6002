@@ -12,12 +12,6 @@ public class GlobalVariables extends SubsystemBase{
     boolean m_readyToShoot = false;
     boolean m_calibrationMode = false;
 
-    public enum SourceSlot{
-        LEFT,
-        MIDDLE,
-        RIGHT
-    }
-
     public enum RobotState{
         Home,
         ReadyToIntake,
@@ -29,6 +23,13 @@ public class GlobalVariables extends SubsystemBase{
         Hanging
     }
 
+    public enum ScoringMode{
+        SPEAKER,
+        AMP
+    }
+
+    private ScoringMode m_scoringMode = ScoringMode.SPEAKER;
+
     private RobotState m_robotState = RobotState.Home;
 
     public void setRobotState(RobotState p_robotState){
@@ -39,7 +40,13 @@ public class GlobalVariables extends SubsystemBase{
         return m_robotState == p_RobotState;
     }
 
-    private SourceSlot m_SourceSlotSelected = SourceSlot.MIDDLE;
+    public void setScoringMode(ScoringMode p_scoringMode){
+        m_scoringMode = p_scoringMode;
+    }
+
+    public boolean isScoringMode(ScoringMode p_scoringMode){
+        return m_scoringMode == p_scoringMode;
+    }
 
     @Override
     public void periodic(){
@@ -68,14 +75,6 @@ public class GlobalVariables extends SubsystemBase{
 
     public double getDistanceToTarget(){
         return m_DistanceToTarget;
-    }
-
-    public void SetSourceSlot(SourceSlot p_SourceSlot){
-        m_SourceSlotSelected = p_SourceSlot;
-    }
-
-    public SourceSlot getSelectedSourceSlot(){
-        return m_SourceSlotSelected;
     }
 
     public void setReadyToShoot(boolean p_readyToShoot){
