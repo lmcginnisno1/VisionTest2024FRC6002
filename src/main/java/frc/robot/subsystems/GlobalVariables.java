@@ -62,7 +62,7 @@ public class GlobalVariables extends SubsystemBase{
             m_matchTimer.reset();
         }
         if(DriverStation.isAutonomous()){
-            m_formattedMatchTime = "0:" + Math.floor(15 - m_matchTimer.get());
+            m_formattedMatchTime = "0:" + (int)Math.floor(15 - m_matchTimer.get());
         }
         if(DriverStation.isTeleop()){
             int minutes = (int)Math.floor((135 - Math.floor(m_matchTimer.get())) / 60);
