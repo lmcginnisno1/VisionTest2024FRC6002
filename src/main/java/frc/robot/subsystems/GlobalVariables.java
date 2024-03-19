@@ -62,15 +62,25 @@ public class GlobalVariables extends SubsystemBase{
             m_matchTimer.reset();
         }
         if(DriverStation.isAutonomous()){
-            m_formattedMatchTime = "0:" + (int)Math.floor(15 - m_matchTimer.get());
+            if(Math.ceil(15 - m_matchTimer.get()) < 10){
+                m_formattedMatchTime = "0:0" + (int)Math.ceil(15 - m_matchTimer.get());  
+            }else{
+                m_formattedMatchTime = "0:" + (int)Math.ceil(15 - m_matchTimer.get());
+            }
+            if(m_matchTimer.get() > 15){
+                m_formattedMatchTime = "0:00";
+            }
         }
         if(DriverStation.isTeleop()){
-            int minutes = (int)Math.floor((135 - Math.floor(m_matchTimer.get())) / 60);
-            int seconds = (135 - minutes * 60) - (int)Math.floor(m_matchTimer.get());
+            int minutes = (int)(135 - Math.ceil(m_matchTimer.get())) / 60;
+            int seconds = (int)((135 - minutes * 60) - Math.ceil(m_matchTimer.get()));
             if(seconds < 10){
                 m_formattedMatchTime = minutes + ":0" + seconds;
             }else{
                 m_formattedMatchTime = minutes + ":" + seconds;
+            }
+            if(minutes + seconds < 0){
+                m_formattedMatchTime = "0:00";
             }
         }
         SmartDashboard.putString("Match Time", m_formattedMatchTime);
