@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class GlobalVariables extends SubsystemBase{
@@ -11,6 +14,8 @@ public class GlobalVariables extends SubsystemBase{
     private double m_DistanceToTarget = 0;
     boolean m_readyToShoot = false;
     boolean m_calibrationMode = false;
+    Timer m_matchTimer = new Timer();
+    String m_formattedMatchTime = "0:00";
 
     public enum RobotState{
         Home,
@@ -50,7 +55,25 @@ public class GlobalVariables extends SubsystemBase{
 
     @Override
     public void periodic(){
-        
+        if(DriverStation.isEnabled()){
+            m_matchTimer.start();
+        }else{
+            m_matchTimer.stop();
+            m_matchTimer.reset();
+        }
+        if(DriverStation.isAutonomous()){
+            m_formattedMatchTime = "0:" + Math.floor(15 - m_matchTimer.get());
+        }
+        if(DriverStation.isTeleop()){
+            int minutes = (int)Math.floor((135 - Math.floor(m_matchTimer.get())) / 60);
+            int seconds = (135 - minutes * 60) - (int)Math.floor(m_matchTimer.get());
+            if(seconds < 10){
+                m_formattedMatchTime = minutes + ":0" + seconds;
+            }else{
+                m_formattedMatchTime = minutes + ":" + seconds;
+            }
+        }
+        SmartDashboard.putString("Match Time", m_formattedMatchTime);
     }
 
     public void setRobotPose(Pose2d p_robotPose){
