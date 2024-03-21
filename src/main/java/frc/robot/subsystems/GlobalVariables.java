@@ -72,8 +72,8 @@ public class GlobalVariables extends SubsystemBase{
             }
         }
         if(DriverStation.isTeleop()){
-            int minutes = (int)(135 - Math.ceil(m_matchTimer.get())) / 60;
-            int seconds = (int)((135 - minutes * 60) - Math.ceil(m_matchTimer.get()));
+            int minutes = (int)(135 - (int)m_matchTimer.get()) / 60;
+            int seconds = (int)((135 - minutes * 60) - (int)m_matchTimer.get());
             if(seconds < 10){
                 m_formattedMatchTime = minutes + ":0" + seconds;
             }else{
