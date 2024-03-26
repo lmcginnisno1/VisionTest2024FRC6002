@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.GlobalVariables;
 import frc.robot.subsystems.SUB_Shooter;
+import frc.robot.subsystems.GlobalVariables.ScoringMode;
 
 public class CMD_RevShooter extends Command {
   final SUB_Shooter m_shooter;
@@ -19,13 +20,18 @@ public class CMD_RevShooter extends Command {
 
   @Override
   public void initialize() {
-    if(m_variables.getDistanceToTarget() <= 5){
-      m_shooter.disable();
-      m_shooter.setShooterVoltage(12);
-    }else{
-      m_shooter.enable();
-      m_shooter.setSetpoint(ShooterConstants.kShooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget() * 12));//convert to inces
+    if(m_variables.isScoringMode(ScoringMode.SPEAKER)){
+      if(m_variables.getDistanceToTarget() <= 5){
+        m_shooter.disable();
+        m_shooter.setShooterVoltage(12);
+      }else{
+        m_shooter.enable();
+        m_shooter.setSetpoint(ShooterConstants.kShooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget() * 12));//convert to inces
+      }
+    }else if(m_variables.isScoringMode(ScoringMode.AMP)){
+      m_shooter.setSetpoint(ShooterConstants.kShooterAmp);
     }
+    
   }
 
   @Override

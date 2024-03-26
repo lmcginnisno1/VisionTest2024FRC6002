@@ -32,7 +32,6 @@ public class RobotContainer {
   // The robot's subsystems
   public final GlobalVariables m_variables = new GlobalVariables();
   public final SUB_Led m_led = new SUB_Led();
-  public final SUB_Climber m_climber = new SUB_Climber();
   public final SUB_TopShooter m_topShooter = new SUB_TopShooter();
   public final SUB_BottomShooter m_bottomShooter = new SUB_BottomShooter();
   public final SUB_Vision m_vision = new SUB_Vision();

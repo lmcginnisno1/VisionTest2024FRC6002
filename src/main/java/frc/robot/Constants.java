@@ -54,14 +54,6 @@ public final class Constants {
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
-    public static final HolonomicPathFollowerConfig kHolonomicPathFollowerConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
-      new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
-      kMaxSpeedMetersPerSecond,
-      0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-      new ReplanningConfig() // Default path replanning config. See the API for the options here
-    );
-
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(18.5);
     // Distance between centers of right and left wheels on robot
@@ -89,15 +81,13 @@ public final class Constants {
     public static final int kRearRightDrivingCanId = 8;
     public static final int kRearRightTurningCanId = 7;
 
-    // public static final int kFrontLeftDrivingCanId = 14;
-    // public static final int kRearLeftDrivingCanId = 15;
-    // public static final int kFrontRightDrivingCanId = 5;
-    // public static final int kRearRightDrivingCanId = 4;
-
-    // public static final int kFrontLeftTurningCanId = 13;
-    // public static final int kRearLeftTurningCanId = 16;
-    // public static final int kFrontRightTurningCanId = 6;
-    // public static final int kRearRightTurningCanId = 3;
+    public static final HolonomicPathFollowerConfig kHolonomicPathFollowerConfig = new HolonomicPathFollowerConfig(
+      new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
+      new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
+      kMaxSpeedMetersPerSecond,
+      0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+      new ReplanningConfig() // Default path replanning config. See the API for the options here
+    );
 
     public static final boolean kGyroReversed = false;
   }
@@ -121,8 +111,7 @@ public final class Constants {
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
 
-    public static final double kXFactor = .9882;  // if actual is smaller than odo go down  
-
+    public static final double kXFactor = .9714;  // if actual is smaller than odo go down  
 
     public static final double kDrivingEncoderPositionFactor = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) * kXFactor; // meters
@@ -168,7 +157,6 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
-    public static final int kEncoderPPR = 42;
   }
 
   public static final class IntakeConstants {
@@ -201,8 +189,9 @@ public final class Constants {
     public static final int kBottomShooterMotorMainCANId = 22;
     public static final int kTopShooterMotorCANId = 23;
 
-    public static final double kShooterOn = 1000.0;//RPM
     public static final double kShooterOff = 0.0;
+    public static final double kShooterAmp = 2000;
+
     public static final int kShooterToleranceRPS = 10;
 
     public static final double kTopShooterP = 0.0;
@@ -217,15 +206,12 @@ public final class Constants {
     public static final double kSBottom = 0;
     public static final double kVBottom = 0;
 
-    public static final double kShooterMaxAcceleration = 500;
-    public static final double kShooterMaxVelocity = 3000;
+    public static final double kShooterMaxAcceleration = 6000;
+    public static final double kShooterMaxVelocity = 6000;
     public static final double kShooterMinOupt = -1.0;
     public static final double kShooterMaxOutput = 1.0;
 
-    public static final double kBottomShooterVelocityFF = 10.0;
-
     public static final double[][] kShooterInterpolatorValues = {
-      {36, 2050}, 
       {84, 2250}, 
       {120, 2400}, 
       {180, 2600},
@@ -278,7 +264,7 @@ public final class Constants {
     public static final double kElbowGVolts = 0.22;
 
     public static final double kElbowMaxVelocityRadPerSecond = 6.1;
-    public static final double kElbowMaxAccelerationRadPerSecSquared = 6.1;
+    public static final double kElbowMaxAccelerationRadPerSecSquared = 8.1;
 
     public static final double kElbowPositionConversionFactor = (Math.PI * 2) / 3; // 3:1 ratio to shaft
     public static final double kElbowVelocityConversionFactor = kElbowPositionConversionFactor / 60;
@@ -287,27 +273,30 @@ public final class Constants {
     public static final double kShoulderAmp = 30;
     public static final double kElbowHome = 10; 
     public static final double kElbowAmp = 18.5; 
-    public static final double kElbowGroundIntake =45;
+    public static final double kElbowGroundIntake = 45;
 
     public static final double kTolerance = 1;
 
 
     public static final double[][] kShoulderInterpolatorValues = {
       {36, -45},
-      {84, -30},
-      {120, 0},
-      {180, 0},
-      {240, 5},
-      {300, 0}
+      {50, -45},  
+      {84, -39.2}, 
+      {100, -36.9}, 
+      {120, -33.45}, 
+      {150, -28.95},
+      {180, -28.2},
+      {240, -26.1},
+      {300, -26.0},
     };
 
     public static final double[][] kElbowInterpolatorValues = {
-      {36, 45},
-      {84, 40},
-      {120, 35},
-      {180, 30},
-      {240, 25},
-      {300, 20}
+      {36, 22},
+      {48, 18},
+      {50, 14},  
+      {84, 10}, 
+      {100, 10},
+      {120, 10},
     };
 
     public static final LinearInterpolator kShoulderInterpolator = new LinearInterpolator(kShoulderInterpolatorValues);
@@ -316,16 +305,7 @@ public final class Constants {
   }
 
   public static final class ClimberConstants{
-    public static final int kClimberMotorCANId = 17;
     public static final int kClimberServoPWMPort = 0;
-
-    public static final double kWinchMotorP = 0.0;
-    public static final double kWinchMotorI = 0.0;
-    public static final double kWinchMotorD = 0.0;
-    public static final double kWinchMotorFF = 0.0;
-    
-    public static final double kWinchMaxVelocity = 1;
-    public static final double kWinchMaxAcceleration = 3;
 
     public static final double kClimberServoHooked = 0.0;
     public static final double kClimberServoUnhooked = 0.5;

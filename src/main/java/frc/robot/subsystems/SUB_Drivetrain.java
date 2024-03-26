@@ -14,8 +14,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
+
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -98,6 +99,12 @@ public class SUB_Drivetrain extends SubsystemBase {
       Rotation2d.fromDegrees(m_navx.getAngle()),
       getModulePositions());
 
+      for(PhotonTrackedTarget target : m_vision.getLatestResult().getTargets()){
+        if(target.getFiducialId() == 4 || target.getFiducialId() == 7){
+          m_variables.setAngleToTarget(target.getYaw());
+        }else continue;
+      }
+
       var visionEst = m_vision.getEstimatedGlobalPose();
         visionEst.ifPresent(
                 est -> {
@@ -111,6 +118,18 @@ public class SUB_Drivetrain extends SubsystemBase {
                     }
                 });
 
+       if(DriverStation.getAlliance().isPresent()){
+        if(DriverStation.getAlliance().get() == Alliance.Blue){
+          m_distanceToTarget = Math.sqrt(Math.pow(0 - getPose().getX(), 2) + Math.pow(5.5 - getPose().getY(), 2));
+          SmartDashboard.putNumber("distance to target", m_distanceToTarget);
+        }else if(DriverStation.getAlliance().get() == Alliance.Red){
+          m_distanceToTarget = Math.sqrt(Math.pow(16.5 - getPose().getX(), 2) + Math.pow(5.5 - getPose().getY(), 2));
+          SmartDashboard.putNumber("distance to target", m_distanceToTarget);
+        }
+
+      }
+
+
       SmartDashboard.putNumber("robot X", getPose().getX());
       SmartDashboard.putNumber("robot Y", getPose().getY());
       SmartDashboard.putNumber("robot Heading", getPose().getRotation().getDegrees());
@@ -118,32 +137,7 @@ public class SUB_Drivetrain extends SubsystemBase {
      if(visionEst.isPresent()){
       SmartDashboard.putNumber("visionX", visionEst.get().estimatedPose.getX());
       SmartDashboard.putNumber("visionY", visionEst.get().estimatedPose.getY());
-      SmartDashboard.putNumber("visionHeading", Units.radiansToDegrees(visionEst.get().estimatedPose.getRotation().getAngle()));
      }
-
-      if(DriverStation.getAlliance().isPresent()){
-        if(DriverStation.getAlliance().get() == Alliance.Blue){
-
-          m_distanceToTarget = Math.sqrt(Math.pow(0 - getPose().getX(), 2) + Math.pow(5.5 - getPose().getY(), 2));
-          SmartDashboard.putNumber("distance to target", m_distanceToTarget);
-
-          m_AngleToTarget = Math.asin((5.5 - getPose().getY()) / m_distanceToTarget);
-          SmartDashboard.putNumber("calculated angle", Math.round(Units.radiansToDegrees(m_AngleToTarget)));
-
-        }else if(DriverStation.getAlliance().get() == Alliance.Red){
-
-          m_distanceToTarget = Math.sqrt(Math.pow(16.5 - getPose().getX(), 2) + Math.pow(5.5 - getPose().getY(), 2));
-          SmartDashboard.putNumber("distance to target", m_distanceToTarget);
-
-          m_AngleToTarget = Math.asin((5.5 - getPose().getY()) / m_distanceToTarget);
-          SmartDashboard.putNumber("calculated angle", Math.round(Units.radiansToDegrees(m_AngleToTarget)));
-        }
-
-      }
-
-      m_variables.setAngleToTarget(m_AngleToTarget);
-      m_variables.setDistanceToTarget(m_distanceToTarget);
-      m_variables.setRobotPose(getPose());
       
       telemetry();
   }
