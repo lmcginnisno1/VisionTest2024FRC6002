@@ -58,10 +58,6 @@ public class SUB_Intake extends SubsystemBase{
     }
 
     public void setGroundIntakePower(double p_power){
-        if(p_power > 0){
-            intaking = true;
-            setIndexerPower(p_power);
-        }
         m_mainGroundIntakeMotor.set(p_power);
     }
 
@@ -79,14 +75,6 @@ public class SUB_Intake extends SubsystemBase{
 
     public boolean getIntakeSensor(){
         return m_indexerSensor.get();
-    }
-
-    public void startIntaking(){
-        intaking = true;
-    }
-
-    public void stopIntaking(){
-        intaking = false;
     }
 
     public double getGroundIntakeCurrent(){

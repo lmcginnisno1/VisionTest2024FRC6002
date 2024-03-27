@@ -16,7 +16,6 @@ public class CMD_IntakeOff extends Command {
 
   @Override
   public void initialize() {
-    m_intake.stopIntaking();
     m_intake.setGroundIntakePower(IntakeConstants.kIntakeOff);
   }
 

@@ -16,7 +16,6 @@ public class CMD_IntakeForward extends Command {
 
   @Override
   public void initialize() {
-    m_intake.startIntaking();
     m_intake.setGroundIntakePower(IntakeConstants.kIntakeForward);
   }
 

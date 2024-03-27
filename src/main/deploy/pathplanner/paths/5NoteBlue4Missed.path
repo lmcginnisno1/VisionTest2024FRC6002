@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.0,
+        "y": 7.45
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.49719997806221,
+        "y": 7.45
+      },
+      "isLocked": false,
+      "linkedName": "5NoteBlue4"
+    },
+    {
+      "anchor": {
+        "x": 8.0,
+        "y": 5.775
+      },
+      "prevControl": {
+        "x": 7.0,
+        "y": 5.775
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "5NoteBlueMissed"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.3,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "5NoteBlue",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

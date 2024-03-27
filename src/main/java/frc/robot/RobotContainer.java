@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.autos.FiveNoteBlue;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.GlobalVariables.RobotState;
 import frc.robot.subsystems.GlobalVariables.ScoringMode;
@@ -65,6 +66,7 @@ public class RobotContainer {
 
     m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_DriverController, m_variables));
     autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser.setDefaultOption("FiveNoteBlue", new FiveNoteBlue(this));
     SmartDashboard.putData(autoChooser);
     configureButtonBindings();
   }

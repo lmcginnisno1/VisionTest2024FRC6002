@@ -269,7 +269,8 @@ public final class Constants {
     public static final double kElbowPositionConversionFactor = (Math.PI * 2) / 3; // 3:1 ratio to shaft
     public static final double kElbowVelocityConversionFactor = kElbowPositionConversionFactor / 60;
 
-    public static final double kShoulderHome = -45;//degrees
+    public static final double kShoulderHome = -45;
+    public static final double kShoulderShootThrough = -40;//used in auto to fire notes quicker
     public static final double kShoulderAmp = 30;
     public static final double kElbowHome = 10; 
     public static final double kElbowAmp = 18.5; 

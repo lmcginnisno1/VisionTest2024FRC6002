@@ -16,7 +16,6 @@ public class CMD_IntakeReverse extends Command {
 
   @Override
   public void initialize() {
-    m_intake.stopIntaking();
     m_intake.setGroundIntakePower(IntakeConstants.kIntakeReverse);
   }
 
