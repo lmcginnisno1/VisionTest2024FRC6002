@@ -5,9 +5,6 @@
 package frc.robot;
 
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,20 +49,9 @@ public class RobotContainer {
    */
   public RobotContainer(){
     // Configure the button bindings
-    NamedCommands.registerCommand("Ready", new CMD_RevShooter(m_shooter, m_variables));
-    NamedCommands.registerCommand("Aim drive", new CMD_DriveAim(m_robotDrive, m_variables));
-    NamedCommands.registerCommand("Aim arm", new CMD_ArmAim(m_arm, m_variables));
-    NamedCommands.registerCommand("Aim arm noWait", new CMD_ArmAim(m_arm, m_variables).noWait());
-    NamedCommands.registerCommand("Auto Aim", new CMD_AutoAim(m_robotDrive, m_arm, m_variables));
-    NamedCommands.registerCommand("Fire", new CMD_Shoot(m_intake, m_shooter, m_variables));
-    NamedCommands.registerCommand("Home Arm", new CMD_ArmHome(m_arm));
-    NamedCommands.registerCommand("Home Arm noWait", new CMD_ArmHome(m_arm).noWait());
-    NamedCommands.registerCommand("Intake On", new CMD_IntakeForward(m_intake));
-    NamedCommands.registerCommand("intake off", new CMD_IntakeOff(m_intake));
-    NamedCommands.registerCommand("intake reverse", new CMD_IntakeReverse(m_intake));
-
     m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_DriverController, m_variables));
-    autoChooser = AutoBuilder.buildAutoChooser();
+    m_intake.setDefaultCommand(new CMD_IntakeDefault(this));
+    m_led.setDefaultCommand(new CMD_LedDefault(m_led, m_variables));
     autoChooser.setDefaultOption("FiveNoteBlue", new FiveNoteBlue(this));
     SmartDashboard.putData(autoChooser);
     configureButtonBindings();

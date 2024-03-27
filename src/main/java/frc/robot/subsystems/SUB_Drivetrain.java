@@ -29,6 +29,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
 
@@ -61,6 +62,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
+  private double GyroOffset = 0;
 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
@@ -87,7 +89,20 @@ public class SUB_Drivetrain extends SubsystemBase {
       this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
       this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
       Constants.DriveConstants.kHolonomicPathFollowerConfig,
-      () -> false,
+      () -> {
+        // Boolean supplier that controls when the path will be mirrored for the red alliance
+        // This will flip the path being followed to the red side of the field.
+        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          if(alliance.get() == DriverStation.Alliance.Red){
+            GyroOffset = 180;
+          }
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
       this // Reference to this subsystem to set requirements
     );
   }
@@ -362,11 +377,11 @@ public class SUB_Drivetrain extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_navx.getAngle()).getDegrees();
+    return Math.toDegrees(MathUtil.angleModulus(Math.toRadians(GyroOffset) + Math.toRadians(m_navx.getAngle())));
   }
 
   public Rotation2d getHeadingRotation2d() {
-    return Rotation2d.fromDegrees(m_navx.getAngle());
+    return Rotation2d.fromRadians(MathUtil.angleModulus(Math.toRadians(GyroOffset) + Math.toRadians(m_navx.getAngle())));
   }
 
   /**
