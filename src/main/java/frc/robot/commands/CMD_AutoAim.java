@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.GlobalVariables;
+import frc.robot.GlobalVariables;
 import frc.robot.subsystems.SUB_Arm;
 import frc.robot.subsystems.SUB_Drivetrain;
 

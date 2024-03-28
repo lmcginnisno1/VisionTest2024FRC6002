@@ -7,8 +7,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.GlobalVariables.ScoringMode;
 import frc.robot.commands.*;
-import frc.robot.subsystems.GlobalVariables.ScoringMode;
 
 public class FiveNoteBlue extends SequentialCommandGroup {
   final RobotContainer m_robot;

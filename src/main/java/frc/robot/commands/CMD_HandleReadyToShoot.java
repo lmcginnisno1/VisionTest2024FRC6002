@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.GlobalVariables.RobotState;
+import frc.robot.GlobalVariables.RobotState;
 
 public class CMD_HandleReadyToShoot extends Command {
   final RobotContainer m_robot;

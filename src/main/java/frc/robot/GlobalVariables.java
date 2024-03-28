@@ -1,11 +1,16 @@
-package frc.robot.subsystems;
+package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class GlobalVariables extends SubsystemBase{
 
@@ -14,8 +19,13 @@ public class GlobalVariables extends SubsystemBase{
     private double m_DistanceToTarget = 0;
     boolean m_readyToShoot = false;
     boolean m_calibrationMode = false;
-    Timer m_matchTimer = new Timer();
-    String m_formattedMatchTime = "0:00";
+    final Timer m_matchTimer = new Timer();
+    int m_timeRemaining = 0;
+    final XboxController m_operatorController;
+
+    public GlobalVariables(XboxController p_operatorController){
+        m_operatorController = p_operatorController;
+    }
 
     public enum RobotState{
         Home,
@@ -58,32 +68,23 @@ public class GlobalVariables extends SubsystemBase{
         if(DriverStation.isEnabled()){
             m_matchTimer.start();
         }else{
-            m_matchTimer.stop();
             m_matchTimer.reset();
         }
         if(DriverStation.isAutonomous()){
-            if(Math.ceil(15 - m_matchTimer.get()) < 10){
-                m_formattedMatchTime = "0:0" + (int)Math.ceil(15 - m_matchTimer.get());  
-            }else{
-                m_formattedMatchTime = "0:" + (int)Math.ceil(15 - m_matchTimer.get());
-            }
-            if(m_matchTimer.get() > 15){
-                m_formattedMatchTime = "0:00";
-            }
+            m_timeRemaining = 15 - (int)m_matchTimer.get();
         }
         if(DriverStation.isTeleop()){
-            int minutes = (int)(135 - (int)m_matchTimer.get()) / 60;
-            int seconds = (int)((135 - minutes * 60) - (int)m_matchTimer.get());
-            if(seconds < 10){
-                m_formattedMatchTime = minutes + ":0" + seconds;
-            }else{
-                m_formattedMatchTime = minutes + ":" + seconds;
-            }
-            if(minutes + seconds < 0){
-                m_formattedMatchTime = "0:00";
+            m_timeRemaining = 135 - (int)m_matchTimer.get();
+            //rumble operator controller at 30 seconds remaining
+            if(m_timeRemaining == 30){
+                new SequentialCommandGroup(
+                    new InstantCommand(()-> m_operatorController.setRumble(RumbleType.kBothRumble, 1))
+                    ,new WaitCommand(1)
+                    ,new InstantCommand(()-> m_operatorController.setRumble(RumbleType.kBothRumble, 0))
+                ).schedule();
             }
         }
-        SmartDashboard.putString("Match Time", m_formattedMatchTime);
+        SmartDashboard.putNumber("Match Time", m_timeRemaining);
     }
 
     public void setRobotPose(Pose2d p_robotPose){

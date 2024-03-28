@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -25,9 +28,12 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.GlobalVariables;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -391,5 +397,30 @@ public class SUB_Drivetrain extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_navx.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public Command pathFindToAmp(){
+    // Load the path we want to pathfind to and follow
+    PathPlannerPath path;
+    // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+    PathConstraints constraints = new PathConstraints(
+      3.0, 2.0,
+      Units.degreesToRadians(180), Units.degreesToRadians(180));
+
+    if(DriverStation.getAlliance().isPresent()){
+      if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+        path = PathPlannerPath.fromPathFile("Red Amp");
+      }else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
+        path = PathPlannerPath.fromPathFile("Blue Amp");
+      }else{
+        //alliance in not red or blue, do nothing
+        return new InstantCommand();
+      }
+    }else{
+      //invalid alliance, do nothing
+      return new InstantCommand();
+    }
+        
+    return AutoBuilder.pathfindThenFollowPath(path, constraints, 3.0);
   }
 }
