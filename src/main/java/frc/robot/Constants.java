@@ -21,13 +21,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.utils.LinearInterpolator;
 import frc.utils.led.Color;
-import frc.utils.led.pattern.BlinkPattern;
-import frc.utils.led.pattern.ChasePattern;
-import frc.utils.led.pattern.FadePattern;
-import frc.utils.led.pattern.MergeSortPattern;
-import frc.utils.led.pattern.RainbowPattern;
-import frc.utils.led.pattern.SolidColorPattern;
-import frc.utils.led.pattern.WavePattern;
+import frc.utils.led.pattern.*;
 
 import com.pathplanner.lib.util.PIDConstants;
 
