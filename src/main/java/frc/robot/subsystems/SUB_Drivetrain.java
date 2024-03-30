@@ -68,7 +68,6 @@ public class SUB_Drivetrain extends SubsystemBase {
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
-  private double GyroOffset = 0;
 
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
@@ -78,6 +77,7 @@ public class SUB_Drivetrain extends SubsystemBase {
   final SUB_Vision m_vision;
   double m_distanceToTarget = 0;
   double m_AngleToTarget = 0;
+  double GyroOffset = 0;
   // Odometry class for tracking robot pose
   final SwerveDrivePoseEstimator m_odometry;
 
@@ -86,7 +86,7 @@ public class SUB_Drivetrain extends SubsystemBase {
     m_variables = p_variables;
     m_vision = p_vision;
 
-    m_odometry = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, getHeadingRotation2d(), getModulePositions(),
+    m_odometry = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(),
       new Pose2d(0, 0, new Rotation2d(0)), VisionConstants.stateStdDevs, VisionConstants.visionStdDevs);
 
     AutoBuilder.configureHolonomic(
@@ -102,9 +102,6 @@ public class SUB_Drivetrain extends SubsystemBase {
 
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()) {
-          if(alliance.get() == DriverStation.Alliance.Red){
-            GyroOffset = 180;
-          }
           return alliance.get() == DriverStation.Alliance.Red;
         }
         return false;
@@ -153,7 +150,7 @@ public class SUB_Drivetrain extends SubsystemBase {
 
       SmartDashboard.putNumber("robot X", getPose().getX());
       SmartDashboard.putNumber("robot Y", getPose().getY());
-      SmartDashboard.putNumber("robot Heading", getPose().getRotation().getDegrees());
+      SmartDashboard.putNumber("robot Heading", getHeading());
 
      if(visionEst.isPresent()){
       SmartDashboard.putNumber("visionX", visionEst.get().estimatedPose.getX());
@@ -296,11 +293,11 @@ public class SUB_Drivetrain extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_navx.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getHeading()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
 
     m_chassisSpeeds = fieldRelative
-      ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_navx.getAngle()))
+      ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getHeading()))
       : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
     
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -383,11 +380,7 @@ public class SUB_Drivetrain extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Math.toDegrees(MathUtil.angleModulus(Math.toRadians(GyroOffset) + Math.toRadians(m_navx.getAngle())));
-  }
-
-  public Rotation2d getHeadingRotation2d() {
-    return Rotation2d.fromRadians(MathUtil.angleModulus(Math.toRadians(GyroOffset) + Math.toRadians(m_navx.getAngle())));
+    return Math.toDegrees(MathUtil.angleModulus(-Rotation2d.fromDegrees(m_navx.getAngle()).getRadians()));
   }
 
   /**

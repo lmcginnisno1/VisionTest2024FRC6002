@@ -37,7 +37,7 @@ public class CMD_Shoot extends Command{
         if(m_variables.getDistanceToTarget() <=5){
             m_ChargeTimer.start();
             if(m_ChargeTimer.get() > 0.2){
-                m_intake.setIndexerPower(IntakeConstants.kIndexerForward);
+                m_intake.setIndexerVelocity(IntakeConstants.kIndexerForward);
                 m_powerOffTimer.start();
             }
             if(m_ChargeTimer.get() > 0.2) {
@@ -46,7 +46,7 @@ public class CMD_Shoot extends Command{
         }else{
             m_ChargeTimer.start();
             if(m_ChargeTimer.get() > ShooterConstants.kShooterChargeTimeInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget())){
-                m_intake.setIndexerPower(IntakeConstants.kIndexerForward);
+                m_intake.setIndexerVelocity(IntakeConstants.kIndexerForward);
                 m_powerOffTimer.start();
             }
         }
@@ -55,7 +55,7 @@ public class CMD_Shoot extends Command{
     }
 
     @Override public void end(boolean interrupted){
-        m_intake.setIndexerPower(IntakeConstants.kIndexerOff);
+        m_intake.setIndexerVelocity(IntakeConstants.kIndexerOff);
         m_shooter.enable();
         m_shooter.setSetpoint(ShooterConstants.kShooterOff);
         m_variables.setReadyToShoot(false);

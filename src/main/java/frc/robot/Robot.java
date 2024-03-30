@@ -135,9 +135,9 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   public void subsystemInit(){
-    // m_robotContainer.m_arm.ShoulderInit();
-    // m_robotContainer.m_winch.WinchInit();
-    // m_robotContainer.m_arm.ElbowInit();
-    // m_robotContainer.m_shooter.stop();
+    m_robotContainer.m_arm.ShoulderInit();
+    m_robotContainer.m_arm.ElbowInit();
+    m_robotContainer.m_intake.setGroundIntakeVelocity(0);
+    m_robotContainer.m_intake.setIndexerVelocity(0);
   }
 }

@@ -159,18 +159,23 @@ public final class Constants {
     public static final int kIndexerMotorCANId = 13;
     public static final int kIndexerSensorDigitalPort = 9;
 
-    public static final double kGroundIntakeP = 0.00005;
+    public static final double kGroundIntakeP = 0.0;
     public static final double kGroundIntakeI = 0;
-    public static final double kGroundIntakeD = 0.00001;
-    public static final double kGroundIntakeFF = 0.00022;
+    public static final double kGroundIntakeD = 0.0;
+    public static final double kGroundIntakeFF = 0.00018;
 
-    public static final double kIntakeForward = 0.25;
+    public static final double kIntakeForward = 3000;
     public static final double kIntakeOff = 0.0;
-    public static final double kIntakeReverse = -0.25;
+    public static final double kIntakeReverse = -3000;
 
-    public static final double kIndexerForward = 0.25;
+    public static final double kIndexerP = 0.0;
+    public static final double kIndexerI = 0.0;
+    public static final double kIndexerD = 0.0;
+    public static final double kIndexerFF = 0.00024;
+
+    public static final double kIndexerForward = 2000;
     public static final double kIndexerOff = 0.0;
-    public static final double kIndexerReverse = -0.25;
+    public static final double kIndexerReverse = -2000;
 
     public static final int kIndexerCurrentLimit = 40;
     public static final int kGroundIntakeCurrentLimit = 40;
@@ -188,20 +193,20 @@ public final class Constants {
 
     public static final int kShooterToleranceRPS = 10;
 
-    public static final double kTopShooterP = 0.0;
+    public static final double kTopShooterP = 0.0075;
     public static final double kTopShooterI = 0.0;
-    public static final double kTopShooterD = 0.0;
-    public static final double kSTop = 0;
-    public static final double kVTop = 0;
+    public static final double kTopShooterD = 0.001;
+    public static final double kSTop = 0.22;
+    public static final double kVTop = 0.0022;
 
-    public static final double kBottomShooterP = 0.0;
+    public static final double kBottomShooterP = 0.0075;
     public static final double kBottomShooterI = 0.0;
-    public static final double kBottomShooterD = 0.0;
-    public static final double kSBottom = 0;
-    public static final double kVBottom = 0;
+    public static final double kBottomShooterD = 0.001;
+    public static final double kSBottom = 0.24;
+    public static final double kVBottom = 0.0022;
 
-    public static final double kShooterMaxAcceleration = 6000;
-    public static final double kShooterMaxVelocity = 6000;
+    public static final double kShooterMaxAcceleration = 4500;
+    public static final double kShooterMaxVelocity = 4500;
     public static final double kShooterMinOupt = -1.0;
     public static final double kShooterMaxOutput = 1.0;
 

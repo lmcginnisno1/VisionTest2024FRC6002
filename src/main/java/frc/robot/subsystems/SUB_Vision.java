@@ -27,7 +27,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -91,7 +90,7 @@ public class SUB_Vision extends SubsystemBase{
             var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
             if (tagPose.isEmpty()) continue;
             numTags++;
-            if(filterTag(numTags)) continue;
+            // if(filterTag(numTags)) continue;
             avgDist +=
                     tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
         }
@@ -105,10 +104,6 @@ public class SUB_Vision extends SubsystemBase{
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
         return estStdDevs;
-    }
-
-    public boolean filterTag(int tagIndex){
-        return(Math.abs(new Rotation2d(180).plus(getLatestResult().getTargets().get(tagIndex).getBestCameraToTarget().getRotation().toRotation2d()).getDegrees())) > 45;
     }
 
     @Override

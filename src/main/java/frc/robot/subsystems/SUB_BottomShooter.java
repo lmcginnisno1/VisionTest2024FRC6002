@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ShooterConstants;
 
@@ -16,6 +15,7 @@ public class SUB_BottomShooter extends PIDSubsystem{
     final CANSparkMax m_bottomShooterMotorFollower;
     final RelativeEncoder m_bottomShooterEncoder;
     double setpoint;
+    boolean firstloop = true;
 
     private SimpleMotorFeedforward m_bottomShooterFeedforward =
       new SimpleMotorFeedforward(
@@ -60,34 +60,31 @@ public class SUB_BottomShooter extends PIDSubsystem{
     }
 
     public void telemetry(){
-        SmartDashboard.putNumber("Bottom shooter motor velocity", m_bottomShooterEncoder.getVelocity());
-        SmartDashboard.putNumber("Bottom shooter commanded velocity", 0);
-        setSetpoint(SmartDashboard.getNumber("Bottom shooter commanded velocity", getSetpoint()));
-        SmartDashboard.putNumber("Bottom Shooter P", m_controller.getP());
-        SmartDashboard.putNumber("Bottom Shooter I", m_controller.getI());
-        SmartDashboard.putNumber("Bottom Shooter D", m_controller.getD());
-        SmartDashboard.putNumber("Bottom shooter kS", m_bottomShooterFeedforward.ks);
-        SmartDashboard.putNumber("Bottom shooter kV", m_bottomShooterFeedforward.kv);
-        
-        m_controller.setPID(SmartDashboard.getNumber("Bottom Shooter P", m_controller.getP()),
-                            SmartDashboard.getNumber("Bottom Shooter I", m_controller.getI()),
-                            SmartDashboard.getNumber("Bottom Shooter D", m_controller.getD())
-        );
+        // if(firstloop){
+        //     SmartDashboard.putNumber("Bottom shooter commanded velocity", 0);
+        //     SmartDashboard.putNumber("Bottom Shooter P", m_controller.getP());
+        //     SmartDashboard.putNumber("Bottom Shooter I", m_controller.getI());
+        //     SmartDashboard.putNumber("Bottom Shooter D", m_controller.getD());
+        //     SmartDashboard.putNumber("Bottom shooter kS", m_bottomShooterFeedforward.ks);
+        //     SmartDashboard.putNumber("Bottom shooter kV", m_bottomShooterFeedforward.kv);  
+        //     firstloop = false;  
+        // }
 
-        m_bottomShooterFeedforward = new SimpleMotorFeedforward(SmartDashboard.getNumber("Bottom shooter kS", 0),
-            SmartDashboard.getNumber("Bottom shooter kV", 0));
+        // m_controller.setPID(SmartDashboard.getNumber("Bottom Shooter P", m_controller.getP()),
+        //                     SmartDashboard.getNumber("Bottom Shooter I", m_controller.getI()),
+        //                     SmartDashboard.getNumber("Bottom Shooter D", m_controller.getD())
+        // );
+
+        // m_bottomShooterFeedforward = new SimpleMotorFeedforward(SmartDashboard.getNumber("Bottom shooter kS", 0),
+        //     SmartDashboard.getNumber("Bottom shooter kV", 0));
+
+        // setSetpoint(SmartDashboard.getNumber("Bottom shooter commanded velocity", getSetpoint()));
+        // SmartDashboard.putNumber("Bottom shooter motor velocity", m_bottomShooterEncoder.getVelocity());
     }
 
     @Override
     public void periodic(){
-        // super.periodic();
-        setpoint += 0.001;
-        m_bottomShooterMotorMain.setVoltage(setpoint);
-        if(m_bottomShooterEncoder.getPosition() > 0){
-            SmartDashboard.putNumber("bottom shooter kS", setpoint - 0.001);
-            setpoint = 0;
-            m_bottomShooterMotorMain.setVoltage(setpoint);
-        }
+        super.periodic();
         telemetry();
     }
 }

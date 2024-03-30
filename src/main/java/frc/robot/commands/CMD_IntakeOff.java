@@ -16,7 +16,8 @@ public class CMD_IntakeOff extends Command {
 
   @Override
   public void initialize() {
-    m_intake.setGroundIntakePower(IntakeConstants.kIntakeOff);
+    m_intake.setGroundIntakeVelocity(IntakeConstants.kIntakeOff);
+    m_intake.setIndexerVelocity(IntakeConstants.kIndexerOff);
   }
 
   @Override

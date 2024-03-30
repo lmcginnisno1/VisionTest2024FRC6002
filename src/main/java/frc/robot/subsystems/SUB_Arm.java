@@ -125,9 +125,9 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     public void setShoulderGoal(double p_goal){
-        m_ShoulderSetpoint = new TrapezoidProfile.State(Math.toRadians(getShoulderAngleRad()), getShoulderVelocity());
+        m_ShoulderSetpoint = new TrapezoidProfile.State(getShoulderAngleRad(), getShoulderVelocity());
         double ShoulderGoal = MathUtil.clamp(p_goal, Math.toRadians(-45), Math.toRadians(-10));
-        m_ShoulderGoal = new TrapezoidProfile.State(Math.toRadians(ShoulderGoal), 0);
+        m_ShoulderGoal = new TrapezoidProfile.State(ShoulderGoal, 0);
     }
 
     public double getShoulderGoal(){
@@ -189,7 +189,7 @@ public class SUB_Arm extends SubsystemBase{
     public void telemetry(){
         SmartDashboard.putNumber("shoulder angle", getShoulderAngle());
         SmartDashboard.putNumber("elbow angle", getElbowAngle());
-        SmartDashboard.putNumber("shoulder goal", Math.toDegrees(m_ShoulderGoal.position));
-        SmartDashboard.putNumber("elbow goal", Math.toDegrees(m_ElbowGoal.position));
+        SmartDashboard.putNumber("shoulder goal", getShoulderGoal());
+        SmartDashboard.putNumber("elbow goal", getElbowGoal());
     }
 }

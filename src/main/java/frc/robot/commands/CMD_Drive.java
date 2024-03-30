@@ -5,14 +5,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.GlobalVariables;
 import frc.robot.subsystems.SUB_Drivetrain;
 
 public class CMD_Drive extends Command{
 
   private final SUB_Drivetrain m_drivetrain;
   private final CommandXboxController controller;
-  private final GlobalVariables m_variables;
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   // private final SlewRateLimiter xspeedLimiter = new SlewRateLimiter(0.5);
   // private final SlewRateLimiter yspeedLimiter = new SlewRateLimiter(0.5);
@@ -23,11 +21,10 @@ public class CMD_Drive extends Command{
   double x = 0;           //variable for side to side movement
   double turn = 0;        //variable for turning movement
 
-  public CMD_Drive(SUB_Drivetrain m_drivetrain, CommandXboxController m_driverControllerTrigger, GlobalVariables m_variables) {
+  public CMD_Drive(SUB_Drivetrain m_drivetrain, CommandXboxController m_driverControllerTrigger) {
     this.m_drivetrain = m_drivetrain;
     addRequirements(m_drivetrain);
 
-    this.m_variables = m_variables;
     this.controller = m_driverControllerTrigger;
   }
 
@@ -54,6 +51,7 @@ public class CMD_Drive extends Command{
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     
+
     if(DriverStation.getAlliance().isPresent()){
       if(DriverStation.getAlliance().get() == Alliance.Red){
         xSpeed *= -1;
@@ -62,26 +60,8 @@ public class CMD_Drive extends Command{
     }
 
     // final var rot = rotLimiter.calculate(MathUtil.applyDeadband(-controller.getRightX(), deadzone));
-    var rot = modifyAxis(MathUtil.applyDeadband(-controller.getRightX(), deadzone));
+    var rot = MathUtil.applyDeadband(-controller.getRightX(), deadzone);
     rot = Math.pow(rot, 3);
-
-    /* Override driver rotation if AutoAlign is enabled. */
-    if (this.controller.leftTrigger().getAsBoolean()) {
-        double heading_error =
-            m_variables.getRobotPose().getRotation().getDegrees() - m_variables.getAngleToTarget();
-
-        if (Math.abs(heading_error) > 5) {
-          rot = heading_error * 0.002;
-        }
-    }
-
-    // SmartDashboard.putNumber("xspeed", xSpeed);
-    // SmartDashboard.putNumber("yspeed", ySpeed);
-    // SmartDashboard.putNumber("rotspeed", rot);
-    // SmartDashboard.putNumber("yaxis", controller.getLeftY());
-    // SmartDashboard.putNumber("x-axis", controller.getRightX());
-
-
 
     m_drivetrain.drive(xSpeed, ySpeed, rot, true, true);
   }
@@ -91,29 +71,4 @@ public class CMD_Drive extends Command{
   public void end(boolean interrupted) {
       m_drivetrain.drive(0.0, 0.0, 0.0, true,false);
   }
-
-  // private static double deadband(double value, double deadband) {
-  //   if (Math.abs(value) > deadband) {
-  //     if (value > 0.0) {
-  //       return (value - deadband) / (1.0 - deadband);
-  //     } else {
-  //       return (value + deadband) / (1.0 - deadband);
-  //     }
-  //   } else {
-  //     return 0.0;
-  //   }
-  // }
-
-  private static double modifyAxis(double value) {
-    double modifedValue;
-    // Deadband
-    // value = deadband(value, 0.2);
-
-    // Square the axis
-    modifedValue = value * value;
-    modifedValue = Math.copySign(value, value);
-
-    return modifedValue;
-  }
-
 }

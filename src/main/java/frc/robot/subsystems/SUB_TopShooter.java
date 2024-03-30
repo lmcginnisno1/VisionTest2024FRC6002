@@ -7,15 +7,15 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ShooterConstants;
 
 public class SUB_TopShooter extends PIDSubsystem{
     final CANSparkMax m_topShooterMotor;
     final RelativeEncoder m_topShooterEncoder;
+    boolean firstloop = true;
 
-    private final SimpleMotorFeedforward m_topShooterFeedforward =
+    private SimpleMotorFeedforward m_topShooterFeedforward =
       new SimpleMotorFeedforward(
           ShooterConstants.kSTop, ShooterConstants.kVTop);
 
@@ -50,15 +50,26 @@ public class SUB_TopShooter extends PIDSubsystem{
     }
 
     public void telemetry(){
-        SmartDashboard.putNumber("Top shooter motor velocity", m_topShooterEncoder.getVelocity());
-        SmartDashboard.putNumber("Top Shooter P", m_controller.getP());
-        SmartDashboard.putNumber("Top Shooter I", m_controller.getI());
-        SmartDashboard.putNumber("Top Shooter D", m_controller.getD());
-        
-        m_controller.setPID(SmartDashboard.getNumber("Top Shooter P", m_controller.getP()),
-                            SmartDashboard.getNumber("Top Shooter I", m_controller.getI()),
-                            SmartDashboard.getNumber("Top Shooter D", m_controller.getD())
-        );
+        // if(firstloop){
+        //     SmartDashboard.putNumber("Top shooter commanded velocity", 0);
+        //     SmartDashboard.putNumber("Top Shooter P", m_controller.getP());
+        //     SmartDashboard.putNumber("Top Shooter I", m_controller.getI());
+        //     SmartDashboard.putNumber("Top Shooter D", m_controller.getD());
+        //     SmartDashboard.putNumber("Top shooter kS", m_topShooterFeedforward.ks);
+        //     SmartDashboard.putNumber("Top shooter kV", m_topShooterFeedforward.kv);  
+        //     firstloop = false;  
+        // }
+
+        // m_controller.setPID(SmartDashboard.getNumber("Top Shooter P", m_controller.getP()),
+        //                     SmartDashboard.getNumber("Top Shooter I", m_controller.getI()),
+        //                     SmartDashboard.getNumber("Top Shooter D", m_controller.getD())
+        // );
+
+        // m_topShooterFeedforward = new SimpleMotorFeedforward(SmartDashboard.getNumber("Top shooter kS", 0),
+        //     SmartDashboard.getNumber("Top shooter kV", 0));
+
+        // setSetpoint(SmartDashboard.getNumber("Top shooter commanded velocity", getSetpoint()));
+        // SmartDashboard.putNumber("Top shooter motor velocity", m_topShooterEncoder.getVelocity());
     }
 
     @Override

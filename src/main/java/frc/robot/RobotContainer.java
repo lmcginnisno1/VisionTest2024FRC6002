@@ -32,7 +32,7 @@ public class RobotContainer {
   public final XboxController m_DriverControllerHI = new XboxController(OIConstants.kDriverControllerPort);
   final CommandXboxController m_OperatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   public final XboxController m_OperatorControllerHI = new XboxController(OIConstants.kDriverControllerPort);
-  SendableChooser<Command> autoChooser;
+  SendableChooser<Command> autoChooser = new SendableChooser<Command>();
 
   // The robot's subsystems
   public final GlobalVariables m_variables = new GlobalVariables(m_OperatorControllerHI);//operator controller to rumble at 30 secs.
@@ -52,7 +52,7 @@ public class RobotContainer {
    */
   public RobotContainer(){
     // Configure the button bindings
-    m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_DriverController, m_variables));
+    m_robotDrive.setDefaultCommand(new CMD_Drive(m_robotDrive, m_DriverController));
     m_intake.setDefaultCommand(new CMD_IntakeDefault(this));
     m_led.setDefaultCommand(new CMD_LedDefault(m_led, m_variables));
     autoChooser.setDefaultOption("FiveNoteBlue", new FiveNoteBlue(this));
@@ -71,21 +71,23 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //main cyle of commands
-    m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
+    // m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
 
     //when switching to calibration mode, reset odometry to 0,0,0 to calibrate wheel size
-    m_DriverController.back().onTrue(new CMD_ToggleCalibrationMode(this));
+    // m_DriverController.back().onTrue(new CMD_ToggleCalibrationMode(this));
 
-    //while holding right trigger, chase the closest note in FOV, when released, cancel the command
-    m_DriverController.rightTrigger().whileTrue(new CMD_ChaseDownNote(m_robotDrive, m_intake));
 
     //while holding left trigger, pathfind to our amp, when released, stop
-    m_DriverController.rightTrigger().whileTrue(m_robotDrive.pathFindToAmp());
+    // m_DriverController.rightTrigger().whileTrue(m_robotDrive.pathFindToAmp());
 
     //while holding b, reverse intake, on release go back to forwards if intaking or off if not
     m_DriverController.b().whileTrue(new CMD_IntakeReverse(m_intake)).onFalse(
       new ConditionalCommand(new CMD_IntakeForward(m_intake), new CMD_IntakeOff(m_intake),
        ()-> m_variables.isRobotState(RobotState.ReadyToIntake)));
+
+    // m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
+
+    m_DriverController.back().onTrue(new InstantCommand(()-> m_robotDrive.zeroHeading()));
 
     //OPERATOR BINDINGS   
 
