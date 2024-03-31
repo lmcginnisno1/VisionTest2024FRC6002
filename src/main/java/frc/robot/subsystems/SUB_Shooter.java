@@ -10,8 +10,8 @@ import frc.utils.LinearInterpolator;
 
 public class SUB_Shooter extends SubsystemBase{
     CANSparkMax m_shooterFeederMotor;
-    final SUB_TopShooter m_topShooter;
-    final SUB_BottomShooter m_bottomShooter;
+    public final SUB_TopShooter m_topShooter;
+    public final SUB_BottomShooter m_bottomShooter;
     final SUB_Led m_led;
     final GlobalVariables m_variables;
     final LinearInterpolator m_shooterInterpolator = new LinearInterpolator(ShooterConstants.kShooterInterpolatorValues);

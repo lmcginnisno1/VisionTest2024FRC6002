@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,9 +22,11 @@ public class SUB_Arm extends SubsystemBase{
     final CANSparkMax m_MainShoulderMotor;
     final AbsoluteEncoder m_ShoulderEncoder;
     final CANSparkMax m_FollowerShoulderMotor;
+    ArmFeedforward m_ShoulderFeedforward = new ArmFeedforward(ArmConstants.kShoulderkS, ArmConstants.kShoulderkG, ArmConstants.kShoulderkV);
 
     final CANSparkMax m_ElbowMotor;
     final AbsoluteEncoder m_ElbowEncoder;
+    ArmFeedforward m_elbowFeedForward = new ArmFeedforward(ArmConstants.kElbowkS, ArmConstants.kElbowkG, ArmConstants.kElbowkG);
 
     final SparkPIDController m_ShoulderPIDcontroller;
     final SparkPIDController m_ElbowPIDcontroller;
@@ -41,6 +44,8 @@ public class SUB_Arm extends SubsystemBase{
     final GlobalVariables m_variables;
     final LinearInterpolator m_ShoulderInterpolator = new LinearInterpolator(ArmConstants.kShoulderInterpolatorValues);
     final LinearInterpolator m_ElbowInterpolator = new LinearInterpolator(ArmConstants.kElbowInterpolatorValues);
+
+    boolean firstloop = true;
 
     public SUB_Arm(GlobalVariables p_variables){
         m_variables = p_variables;
@@ -76,8 +81,6 @@ public class SUB_Arm extends SubsystemBase{
         m_ElbowEncoder.setPositionConversionFactor(ArmConstants.kElbowPositionConversionFactor);
         m_ElbowEncoder.setVelocityConversionFactor(ArmConstants.kElbowVelocityConversionFactor);
         m_ElbowPIDcontroller.setPositionPIDWrappingEnabled(false);
-        // m_ElbowPIDcontroller.setPositionPIDWrappingMinInput(-Math.PI);
-        // m_ElbowPIDcontroller.setPositionPIDWrappingMaxInput(Math.PI);
         m_ElbowPIDcontroller.setFeedbackDevice(m_ElbowEncoder);
 
         m_ShoulderPIDcontroller.setP(ArmConstants.kShoulderP, 0);
@@ -90,7 +93,6 @@ public class SUB_Arm extends SubsystemBase{
         m_ElbowPIDcontroller.setD(ArmConstants.kElbowD, 0);
         m_ElbowPIDcontroller.setFF(ArmConstants.kElbowFF, 0);
 
-        m_MainShoulderMotor.setIdleMode(IdleMode.kBrake);
         m_ElbowMotor.setIdleMode(IdleMode.kBrake);
 
         m_ShoulderConstraints = new TrapezoidProfile.Constraints(ArmConstants.kShoulderMaxVelocityRadPerSecond, ArmConstants.kShoulderMaxAccelerationRadPerSecSquared);
@@ -121,12 +123,13 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     private void setShoulderReference(double p_referece){
-        m_ShoulderPIDcontroller.setReference(p_referece, ControlType.kPosition, 0);
+        m_ShoulderPIDcontroller.setReference(p_referece, ControlType.kPosition, 0,
+         m_ShoulderFeedforward.calculate(m_ShoulderSetpoint.position, m_ShoulderSetpoint.velocity));
     }
 
     public void setShoulderGoal(double p_goal){
         m_ShoulderSetpoint = new TrapezoidProfile.State(getShoulderAngleRad(), getShoulderVelocity());
-        double ShoulderGoal = MathUtil.clamp(p_goal, Math.toRadians(-45), Math.toRadians(-10));
+        double ShoulderGoal = MathUtil.clamp(Math.toRadians(p_goal), Math.toRadians(-45), Math.toRadians(10));
         m_ShoulderGoal = new TrapezoidProfile.State(ShoulderGoal, 0);
     }
 
@@ -149,8 +152,9 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     private void setElbowReference(double p_reference){
-        double adjustedReference = Math.toRadians(p_reference);
-        m_ElbowPIDcontroller.setReference(adjustedReference, ControlType.kPosition, 0);
+        double adjustedReference = p_reference;
+        m_ElbowPIDcontroller.setReference(adjustedReference, ControlType.kPosition, 0,
+        m_elbowFeedForward.calculate(m_ElbowSetpoint.position, m_ElbowSetpoint.velocity));
     }
 
     private double getElbowVelocity(){
@@ -159,8 +163,8 @@ public class SUB_Arm extends SubsystemBase{
 
     public void setElbowGoal(double p_goal){
         m_ElbowSetpoint = new TrapezoidProfile.State(getElbowAngleRad(), getElbowVelocity());
-        double ElbowGoal = MathUtil.clamp(p_goal, 8, 115);
-        m_ElbowGoal = new TrapezoidProfile.State(Math.toRadians(ElbowGoal)  - getShoulderAngleRad(), 0);
+        double ElbowGoal = MathUtil.clamp(Math.toRadians(p_goal), Math.toRadians(8), Math.toRadians(115));
+        m_ElbowGoal = new TrapezoidProfile.State(Math.toRadians(ElbowGoal) - getShoulderAngleRad(), 0);
     }
 
     public double getElbowGoal(){
@@ -187,6 +191,29 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     public void telemetry(){
+        // if(firstloop){
+        //     SmartDashboard.putNumber("Shoulder P", m_ShoulderPIDcontroller.getP());
+        //     SmartDashboard.putNumber("Shoulder I", m_ShoulderPIDcontroller.getI());
+        //     SmartDashboard.putNumber("Shoulder D", m_ShoulderPIDcontroller.getD());
+        //     SmartDashboard.putNumber("Shoulder FF", m_ShoulderPIDcontroller.getFF());
+        //     SmartDashboard.putNumber("Shoulder kS", m_ShoulderFeedforward.ks);
+        //     SmartDashboard.putNumber("Shoulder kG", m_ShoulderFeedforward.kg);
+        //     SmartDashboard.putNumber("Shoulder kV", m_ShoulderFeedforward.kv);
+        //     SmartDashboard.putNumber("Shoulder goal", getShoulderGoal());
+        //     firstloop = false;
+        // }
+
+        // m_ShoulderPIDcontroller.setP(SmartDashboard.getNumber("Shoulder P", m_ShoulderPIDcontroller.getP()));
+        // m_ShoulderPIDcontroller.setI(SmartDashboard.getNumber("Shoulder I", m_ShoulderPIDcontroller.getI()));
+        // m_ShoulderPIDcontroller.setD(SmartDashboard.getNumber("Shoulder D", m_ShoulderPIDcontroller.getD()));
+        // m_ShoulderPIDcontroller.setFF(SmartDashboard.getNumber("Shoulder FF", m_ShoulderPIDcontroller.getFF()));
+
+        // m_ShoulderFeedforward = new ArmFeedforward(SmartDashboard.getNumber("Shoulder kS", m_ShoulderFeedforward.ks),
+        //     SmartDashboard.getNumber("Shoulder kG", m_ShoulderFeedforward.kg),
+        //     SmartDashboard.getNumber("Shoulder kV", m_ShoulderFeedforward.kv));
+
+        // setShoulderGoal(SmartDashboard.getNumber("Shoulder goal", getShoulderGoal()));
+
         SmartDashboard.putNumber("shoulder angle", getShoulderAngle());
         SmartDashboard.putNumber("elbow angle", getElbowAngle());
         SmartDashboard.putNumber("shoulder goal", getShoulderGoal());

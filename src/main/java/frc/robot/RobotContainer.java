@@ -85,7 +85,9 @@ public class RobotContainer {
       new ConditionalCommand(new CMD_IntakeForward(m_intake), new CMD_IntakeOff(m_intake),
        ()-> m_variables.isRobotState(RobotState.ReadyToIntake)));
 
-    // m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
+    m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
+
+    m_DriverController.a().onTrue(new InstantCommand(()-> m_arm.setElbowGoal(-30)));
 
     m_DriverController.back().onTrue(new InstantCommand(()-> m_robotDrive.zeroHeading()));
 

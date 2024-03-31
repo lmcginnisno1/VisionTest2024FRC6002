@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.GlobalVariables.RobotState;
 
@@ -39,7 +38,6 @@ public class CMD_HandleReadyToShoot extends Command {
         ,new CMD_ArmAim(m_robot.m_arm, m_robot.m_variables).noWait()
         ,new CMD_DriveAim(m_robot.m_robotDrive, m_robot.m_variables)
         ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.ReadyToShoot))
-        ,new WaitCommand(1)
         ,new CMD_Shoot(m_robot.m_intake, m_robot.m_shooter, m_robot.m_variables)
         ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.TransitioningToHome))
         ,new CMD_ArmHome(m_robot.m_arm)

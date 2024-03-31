@@ -190,8 +190,9 @@ public final class Constants {
 
     public static final double kShooterOff = 0.0;
     public static final double kShooterAmp = 2000;
+    public static final double kShooterSubwoofer = 2000;
 
-    public static final int kShooterToleranceRPS = 10;
+    public static final int kShooterToleranceRPS = 100;
 
     public static final double kTopShooterP = 0.0075;
     public static final double kTopShooterI = 0.0;
@@ -219,17 +220,6 @@ public final class Constants {
     };
 
     public static final LinearInterpolator kShooterInterpolator = new LinearInterpolator(kShooterInterpolatorValues);
-
-    public static final double[][] kShooterChargeTimeInterpolatorValues = {
-      {5, 0.5},
-      {6, 0.6},
-      {7, 0.7},
-      {8, 0.8},
-      {9, 0.9},
-      {10, 1}
-    };
-
-    public static final LinearInterpolator kShooterChargeTimeInterpolator = new LinearInterpolator(kShooterChargeTimeInterpolatorValues);
   }
 
   public static final class ArmConstants{
@@ -240,13 +230,14 @@ public final class Constants {
     public static final int kShoulderCurrentLimit = 50;
     public static final int kElbowCurrentLimit = 50;
 
-    public static final double kShoulderP = 2.1;
+    public static final double kShoulderP = 3.5;
     public static final double kShoulderI = 0;
     public static final double kShoulderD = 0;
     public static final double kShoulderFF = 0.0;
 
-    public static final double kSVolts = 0.1;
-    public static final double kGVolts = 0.2394;
+    public static final double kShoulderkS = 0.3;
+    public static final double kShoulderkG = 0.275;
+    public static final double kShoulderkV = 0.0;
 
     public static final double kShoulderMaxVelocityRadPerSecond = 6.1;
     public static final double kShoulderMaxAccelerationRadPerSecSquared = 8.1;
@@ -254,13 +245,14 @@ public final class Constants {
     public static final double kShoulderPositionConversionFactor = Math.PI * 2; // radians
     public static final double kShoulderVelocityConversionFactor = kShoulderPositionConversionFactor / 60; // radians per second
 
-    public static final double kElbowP = 0.85;
+    public static final double kElbowP = 0;
     public static final double kElbowI = 0;
     public static final double kElbowD = 0.0;
     public static final double kElbowFF = 0.0;
     
-    public static final double kElbowSVolts = 0;
-    public static final double kElbowGVolts = 0.22;
+    public static final double kElbowkS = 0.0;
+    public static final double kElbowkG = 0.0;
+    public static final double kElbowkV = 0.0;
 
     public static final double kElbowMaxVelocityRadPerSecond = 6.1;
     public static final double kElbowMaxAccelerationRadPerSecSquared = 8.1;

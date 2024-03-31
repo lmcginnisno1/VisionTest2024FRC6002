@@ -27,8 +27,7 @@ public class CMD_RevShooter extends Command {
 
     if(m_variables.isScoringMode(ScoringMode.SPEAKER)){
       if(m_variables.getDistanceToTarget() <= 5){
-        m_shooter.disable();
-        m_shooter.setShooterVoltage(12);
+        m_shooter.setSetpoint(ShooterConstants.kShooterSubwoofer);
         m_revTimer.start();
       }else{
         m_shooter.enable();
@@ -37,18 +36,15 @@ public class CMD_RevShooter extends Command {
     }else if(m_variables.isScoringMode(ScoringMode.AMP)){
       m_shooter.setSetpoint(ShooterConstants.kShooterAmp);
     }
-    
+    m_shooter.enable();
   }
 
   @Override
   public void execute(){
-    if(m_revTimer.get() > .05){
-      m_shooter.enable();
-    }
   }
 
   @Override
   public boolean isFinished() {
-    return m_revTimer.get() > 0.5;
+    return true;
   }
 }
