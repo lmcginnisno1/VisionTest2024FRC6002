@@ -5,8 +5,6 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.GlobalVariables;
 import frc.robot.Constants.LedConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.utils.LinearInterpolator;
 
 public class SUB_Shooter extends SubsystemBase{
     CANSparkMax m_shooterFeederMotor;
@@ -14,7 +12,6 @@ public class SUB_Shooter extends SubsystemBase{
     public final SUB_BottomShooter m_bottomShooter;
     final SUB_Led m_led;
     final GlobalVariables m_variables;
-    final LinearInterpolator m_shooterInterpolator = new LinearInterpolator(ShooterConstants.kShooterInterpolatorValues);
     double interpolatedRPM = 0;
 
     public SUB_Shooter(SUB_TopShooter p_TopShooter, SUB_BottomShooter p_BottomShooter, SUB_Led p_led, GlobalVariables p_variables){
@@ -55,7 +52,7 @@ public class SUB_Shooter extends SubsystemBase{
         if(m_variables.ReadyToShoot()){
             m_led.setLedColors(LedConstants.kBrightGreen, LedConstants.kBrightGreen);
             m_led.setPattern(LedConstants.kChasePattern);
-            m_led.setPatternDuration(1 / (getShooterVelocites()[1] / 500));
+            m_led.setPatternDuration((1 / getShooterVelocites()[1]) / 500);
         }
     }
 

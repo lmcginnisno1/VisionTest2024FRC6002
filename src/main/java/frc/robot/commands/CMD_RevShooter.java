@@ -26,21 +26,18 @@ public class CMD_RevShooter extends Command {
     m_revTimer.reset();
 
     if(m_variables.isScoringMode(ScoringMode.SPEAKER)){
-      if(m_variables.getDistanceToTarget() <= 5){
+      if(m_variables.getDistanceToTarget() <= 30){
         m_shooter.setSetpoint(ShooterConstants.kShooterSubwoofer);
         m_revTimer.start();
       }else{
-        m_shooter.enable();
-        m_shooter.setSetpoint(ShooterConstants.kShooterInterpolator.getInterpolatedValue(m_variables.getDistanceToTarget() * 12));//convert to inces
+        m_shooter.setSetpoint(ShooterConstants.kShooterLongshotSpeed);
       }
     }else if(m_variables.isScoringMode(ScoringMode.AMP)){
       m_shooter.setSetpoint(ShooterConstants.kShooterAmp);
+    }else{
+      return;
     }
     m_shooter.enable();
-  }
-
-  @Override
-  public void execute(){
   }
 
   @Override

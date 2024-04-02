@@ -137,6 +137,10 @@ public class SUB_Arm extends SubsystemBase{
         return Math.toDegrees(m_ShoulderGoal.position);
     }
 
+    public boolean getShoulderAtSetpoint(){
+        return Math.abs(getShoulderGoal() - getShoulderAngle()) < ArmConstants.kTolerance;
+    }
+
     public void ShoulderInit(){
         m_ShoulderSetpoint = new TrapezoidProfile.State(getShoulderAngleRad(), 0);
         m_ShoulderGoal = m_ShoulderSetpoint;
@@ -148,7 +152,7 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     public double getElbowAngleRad(){
-        return MathUtil.angleModulus(m_ElbowEncoder.getPosition() - m_ShoulderEncoder.getPosition());
+        return MathUtil.angleModulus(m_ElbowEncoder.getPosition() - m_ElbowEncoder.getPosition());
     }
 
     private void setElbowReference(double p_reference){
@@ -164,7 +168,7 @@ public class SUB_Arm extends SubsystemBase{
     public void setElbowGoal(double p_goal){
         m_ElbowSetpoint = new TrapezoidProfile.State(getElbowAngleRad(), getElbowVelocity());
         double ElbowGoal = MathUtil.clamp(Math.toRadians(p_goal), Math.toRadians(8), Math.toRadians(115));
-        m_ElbowGoal = new TrapezoidProfile.State(Math.toRadians(ElbowGoal) - getShoulderAngleRad(), 0);
+        m_ElbowGoal = new TrapezoidProfile.State(Math.toRadians(ElbowGoal) + getShoulderAngleRad(), 0);
     }
 
     public double getElbowGoal(){
@@ -172,7 +176,7 @@ public class SUB_Arm extends SubsystemBase{
     }
 
     public void ElbowInit(){
-        m_ElbowSetpoint = new TrapezoidProfile.State(getElbowAngleRad(), 0);
+        m_ElbowSetpoint = new TrapezoidProfile.State(getElbowAngleRad(), getElbowVelocity());
         m_ElbowGoal = m_ElbowSetpoint;
     }
 

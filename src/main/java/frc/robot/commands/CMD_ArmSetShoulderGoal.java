@@ -22,6 +22,6 @@ public class CMD_ArmSetShoulderGoal extends Command {
 
   @Override
   public boolean isFinished() {
-    return true;
+    return m_arm.getShoulderAtSetpoint();
   }
 }

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -87,7 +88,11 @@ public class RobotContainer {
 
     m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
 
-    m_DriverController.a().onTrue(new InstantCommand(()-> m_arm.setElbowGoal(-30)));
+    m_DriverController.a().onTrue(new SequentialCommandGroup(
+      new CMD_ArmSetShoulderGoal(m_arm, 0)
+    ));
+
+    m_DriverController.y().onTrue(new InstantCommand(()-> m_arm.setElbowGoal(45)));
 
     m_DriverController.back().onTrue(new InstantCommand(()-> m_robotDrive.zeroHeading()));
 

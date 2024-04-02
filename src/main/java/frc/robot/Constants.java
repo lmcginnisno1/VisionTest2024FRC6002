@@ -208,18 +208,9 @@ public final class Constants {
 
     public static final double kShooterMaxAcceleration = 4500;
     public static final double kShooterMaxVelocity = 4500;
+    public static final double kShooterLongshotSpeed = 3500;
     public static final double kShooterMinOupt = -1.0;
     public static final double kShooterMaxOutput = 1.0;
-
-    public static final double[][] kShooterInterpolatorValues = {
-      {84, 2250}, 
-      {120, 2400}, 
-      {180, 2600},
-      {240, 3000},
-      {300, 3250},
-    };
-
-    public static final LinearInterpolator kShooterInterpolator = new LinearInterpolator(kShooterInterpolatorValues);
   }
 
   public static final class ArmConstants{
@@ -245,13 +236,13 @@ public final class Constants {
     public static final double kShoulderPositionConversionFactor = Math.PI * 2; // radians
     public static final double kShoulderVelocityConversionFactor = kShoulderPositionConversionFactor / 60; // radians per second
 
-    public static final double kElbowP = 0;
+    public static final double kElbowP = 2;
     public static final double kElbowI = 0;
     public static final double kElbowD = 0.0;
     public static final double kElbowFF = 0.0;
     
-    public static final double kElbowkS = 0.0;
-    public static final double kElbowkG = 0.0;
+    public static final double kElbowkS = 0.3;
+    public static final double kElbowkG = 0.1;
     public static final double kElbowkV = 0.0;
 
     public static final double kElbowMaxVelocityRadPerSecond = 6.1;
@@ -268,7 +259,6 @@ public final class Constants {
     public static final double kElbowGroundIntake = 45;
 
     public static final double kTolerance = 1;
-
 
     public static final double[][] kShoulderInterpolatorValues = {
       {36, -45},

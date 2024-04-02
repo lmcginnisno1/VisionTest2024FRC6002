@@ -24,7 +24,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -75,8 +74,6 @@ public class SUB_Drivetrain extends SubsystemBase {
   ChassisSpeeds m_chassisSpeeds = new ChassisSpeeds(0, 0, 0);
   final GlobalVariables m_variables;
   final SUB_Vision m_vision;
-  double m_distanceToTarget = 0;
-  double m_AngleToTarget = 0;
   double GyroOffset = 0;
   // Odometry class for tracking robot pose
   final SwerveDrivePoseEstimator m_odometry;
@@ -117,41 +114,38 @@ public class SUB_Drivetrain extends SubsystemBase {
       Rotation2d.fromDegrees(m_navx.getAngle()),
       getModulePositions());
 
+      //check all detected tags and if they are the tags on the speaker, display the angle to the target
       for(PhotonTrackedTarget target : m_vision.getLatestResult().getTargets()){
         if(target.getFiducialId() == 4 || target.getFiducialId() == 7){
           m_variables.setAngleToTarget(target.getYaw());
         }else continue;
       }
 
+      //get the ID of the "best target" to find the distance to this target
+      var BestTagID = m_vision.getLatestResult().getBestTarget().getFiducialId();
+      //find the distance to the above tag ID, uses an apriltag field layout combined with our current pose
+      var DistanceToTarget = getPose().getTranslation().getDistance(
+        VisionConstants.kAprilTagFieldLayout.getTagPose(BestTagID).get().getTranslation().toTranslation2d());
+      //display the distance to the target
+      SmartDashboard.putNumber("distance to target", DistanceToTarget);
+
+      //add vision measurements to our DriveTrain Pose Estimator, unless in calibration mode
       var visionEst = m_vision.getEstimatedGlobalPose();
         visionEst.ifPresent(
-                est -> {
-                    var estPose = est.estimatedPose.toPose2d();
-                    // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = m_vision.getEstimationStdDevs(estPose);
+          est -> {
+            var estPose = est.estimatedPose.toPose2d();
+            // Change our trust in the measurement based on the tags we can see
+            var estStdDevs = m_vision.getEstimationStdDevs(estPose);
 
-                    if(!m_variables.getCalibrationMode()){
-                      m_odometry.addVisionMeasurement(
-                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    }
-                });
-
-       if(DriverStation.getAlliance().isPresent()){
-        if(DriverStation.getAlliance().get() == Alliance.Blue){
-          m_distanceToTarget = Math.sqrt(Math.pow(0 - getPose().getX(), 2) + Math.pow(5.5 - getPose().getY(), 2));
-          SmartDashboard.putNumber("distance to target", m_distanceToTarget);
-        }else if(DriverStation.getAlliance().get() == Alliance.Red){
-          m_distanceToTarget = Math.sqrt(Math.pow(16.5 - getPose().getX(), 2) + Math.pow(5.5 - getPose().getY(), 2));
-          SmartDashboard.putNumber("distance to target", m_distanceToTarget);
-        }
-
-      }
-
-
+            if(!m_variables.getCalibrationMode()){
+              m_odometry.addVisionMeasurement(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+            }
+        });
+      
+      //display our current pose and vision pose
       SmartDashboard.putNumber("robot X", getPose().getX());
       SmartDashboard.putNumber("robot Y", getPose().getY());
       SmartDashboard.putNumber("robot Heading", getHeading());
-
      if(visionEst.isPresent()){
       SmartDashboard.putNumber("visionX", visionEst.get().estimatedPose.getX());
       SmartDashboard.putNumber("visionY", visionEst.get().estimatedPose.getY());
