@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
@@ -72,36 +71,30 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //main cyle of commands
-    // m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
-
-    //when switching to calibration mode, reset odometry to 0,0,0 to calibrate wheel size
-    // m_DriverController.back().onTrue(new CMD_ToggleCalibrationMode(this));
-
+    m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
 
     //while holding left trigger, pathfind to our amp, when released, stop
-    // m_DriverController.rightTrigger().whileTrue(m_robotDrive.pathFindToAmp());
+    m_DriverController.rightTrigger().whileTrue(m_robotDrive.pathFindToAmp());
+
+    //toggle between scoring in the Amp or Speaker
+    m_DriverController.leftBumper().onTrue(new ConditionalCommand(
+      new InstantCommand(()-> m_variables.setScoringMode(ScoringMode.AMP)),
+      new InstantCommand(()-> m_variables.setScoringMode(ScoringMode.SPEAKER)),
+      ()-> m_variables.isScoringMode(ScoringMode.SPEAKER)));
+
+    //rev the shooter to fire more quickly once ready to shoot
+    m_DriverController.leftTrigger().onTrue(new CMD_RevShooter(m_shooter, m_variables));
 
     //while holding b, reverse intake, on release go back to forwards if intaking or off if not
     m_DriverController.b().whileTrue(new CMD_IntakeReverse(m_intake)).onFalse(
       new ConditionalCommand(new CMD_IntakeForward(m_intake), new CMD_IntakeOff(m_intake),
        ()-> m_variables.isRobotState(RobotState.ReadyToIntake)));
 
-    m_DriverController.rightBumper().onTrue(new CMD_HandleReadyToShoot(this));
-
-    m_DriverController.a().onTrue(new SequentialCommandGroup(
-      new CMD_ArmSetShoulderGoal(m_arm, 0)
-    ));
-
-    m_DriverController.y().onTrue(new InstantCommand(()-> m_arm.setElbowGoal(45)));
-
+    //reset Gyro in case of drift
     m_DriverController.back().onTrue(new InstantCommand(()-> m_robotDrive.zeroHeading()));
 
-    //OPERATOR BINDINGS   
-
-    m_OperatorController.rightBumper().onTrue(new ConditionalCommand(
-      new InstantCommand(()-> m_variables.setScoringMode(ScoringMode.AMP)),
-      new InstantCommand(()-> m_variables.setScoringMode(ScoringMode.SPEAKER)),
-      ()-> m_variables.isScoringMode(ScoringMode.SPEAKER)));
+    // when switching to calibration mode, reset odometry to 0,0,0 to calibrate wheel size
+    m_DriverController.start().onTrue(new CMD_ToggleCalibrationMode(this));
   }
 
   /**

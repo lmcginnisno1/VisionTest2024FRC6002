@@ -20,6 +20,7 @@ public class CMD_HandleReadyToShoot extends Command {
   public void initialize() {
     if(m_robot.m_variables.isRobotState(RobotState.Home)
           || m_robot.m_variables.isRobotState(RobotState.Stow)
+          || m_robot.m_variables.isRobotState(RobotState.TransitioningToShoot)
           || m_robot.m_variables.isRobotState(RobotState.ReadyToShoot)
       ){ /*these are valid states, allow to continue*/} else return;
 
@@ -31,20 +32,19 @@ public class CMD_HandleReadyToShoot extends Command {
       return;
     }
 
-    if(m_robot.m_variables.isRobotState(RobotState.Stow)){
-      new SequentialCommandGroup(
-        new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.TransitioningToShoot))
-        ,new CMD_RevShooter(m_robot.m_shooter, m_robot.m_variables)
-        ,new CMD_ArmAim(m_robot.m_arm, m_robot.m_variables).noWait()
-        ,new CMD_DriveAim(m_robot.m_robotDrive, m_robot.m_variables)
-        ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.ReadyToShoot))
-        ,new CMD_Shoot(m_robot.m_intake, m_robot.m_shooter, m_robot.m_variables)
-        ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.TransitioningToHome))
-        ,new CMD_ArmHome(m_robot.m_arm)
-        ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.Home))
-      ).schedule();
-      return;
-    }
+    //if in stow, TransitioningToShoot, or ReadyToShoot
+    new SequentialCommandGroup(
+      new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.TransitioningToShoot))
+      ,new CMD_RevShooter(m_robot.m_shooter, m_robot.m_variables)
+      ,new CMD_ArmAim(m_robot.m_arm, m_robot.m_variables).noWait()
+      ,new CMD_DriveAim(m_robot.m_robotDrive, m_robot.m_variables)
+      ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.ReadyToShoot))
+      ,new CMD_Shoot(m_robot.m_intake, m_robot.m_shooter, m_robot.m_variables)
+      ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.TransitioningToHome))
+      ,new CMD_ArmHome(m_robot.m_arm)
+      ,new InstantCommand(()-> m_robot.m_variables.setRobotState(RobotState.Home))
+    ).schedule();
+    return;
   }
 
   @Override
